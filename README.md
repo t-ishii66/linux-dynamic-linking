@@ -3,6 +3,7 @@ title: "Through ELF: Linux Dynamic Linking"
 description: "A walkthrough of Linux dynamic linking through ELF binaries — from ELF header to PLT/GOT to lazy binding — traced on a minimal main + libmylib.so example."
 keywords: "ELF, ELF64, Linux, dynamic linking, dynamic linker, ld-linux.so, ld.so, glibc, PLT, GOT, .plt, .got, .got.plt, lazy binding, symbol resolution, relocation, x86-64, x86_64, PIE, ASLR, position-independent executable, address space layout randomization, .dynamic, DT_NEEDED, DT_STRTAB, DT_SYMTAB, DT_GNU_HASH, R_X86_64_JUMP_SLOT, R_X86_64_RELATIVE, link_map, lookup scope, shared library, .so file, readelf, objdump, hexdump, ldd, strace, walkthrough, tutorial, systems programming, binary analysis, low-level"
 lang: en
+permalink: /
 ---
 
 ![](images/top.png)
@@ -12,6 +13,19 @@ lang: en
 **English** | [日本語 (Japanese)](README-jp.md)
 
 Two files, `main.c` and `mylib.c`, are provided: `main.c` is built into the executable `main`, and `mylib.c` is built into the shared library `libmylib.so`. `main` uses `libmylib.so`, but `libmylib.so` itself is not included inside `main`.
+
+<!-- SEO intro added by setup-github-pages; review and adjust -->
+
+If you have ever wanted to understand **Linux dynamic linking** from the
+ground up — how a call to a function that lives in a **shared library**
+(`.so`) actually reaches its real code at runtime — this walkthrough traces
+the whole path on one tiny example. Topics covered include the **ELF** header
+and program headers, the **dynamic linker** (`ld-linux.so`), the **`.dynamic`**
+section, **symbol resolution** via **`DT_GNU_HASH`**, the **PLT/GOT** bridge,
+**relocations** (`R_X86_64_JUMP_SLOT`), and **lazy binding** on **x86-64**
+**PIE** binaries — inspected directly with `readelf`, `objdump`, and `strace`.
+
+<!-- /SEO intro -->
 
 ## Subject
 

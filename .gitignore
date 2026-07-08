@@ -12,3 +12,6 @@ PROBLEMS.md
 
 # Claude Code local session data
 .claude/
+_site/
+.jekyll-cache/
+.jekyll-metadata

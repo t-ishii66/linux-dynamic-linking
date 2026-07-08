@@ -13,6 +13,12 @@ lang: ja
 
 2 つのファイル `main.c` と `mylib.c` が用意されており、`main.c` は実行ファイル `main` に、`mylib.c` は共有ライブラリ `libmylib.so` にビルドされる。`main` は `libmylib.so` を使うが、`main` 自体に `libmylib.so` は含まれていない。
 
+<!-- SEO intro added by setup-github-pages; review and adjust -->
+
+「**Linux の動的リンク** をゼロから理解したい」「**共有ライブラリ** (`.so`) にある関数の呼び出しが、実行時にどうやって本物のコードへ届くのか知りたい」 ── そんな人のために、極小の題材 1 つでその全経路を追いかける学習ドキュメントです。扱うテーマは **ELF** ヘッダ／プログラムヘッダ、**動的リンカ** (`ld-linux.so`)、**`.dynamic`** セクション、**`DT_GNU_HASH`** による **シンボル解決**、**PLT/GOT** の橋渡し、**再配置** (`R_X86_64_JUMP_SLOT`)、そして **x86-64** **PIE** バイナリでの **遅延束縛 (lazy binding)** など。すべて `readelf` / `objdump` / `strace` で実物を見ながら進めます。
+
+<!-- /SEO intro -->
+
 ## 題材
 
 ```c

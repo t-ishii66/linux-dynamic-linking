@@ -1,0 +1,40 @@
+
+title: "Through ELF: Linux Dynamic Linking"
+description: >-
+  A walkthrough of Linux dynamic linking through ELF binaries — from the ELF
+  header to PLT/GOT to lazy binding — traced end to end on a minimal
+  main + libmylib.so example. For systems programmers who want to see exactly
+  which ELF metadata the dynamic linker uses, and in what order.
+
+url: "https://t-ishii66.github.io"
+baseurl: "/linux-dynamic-linking"
+repository: t-ishii66/linux-dynamic-linking
+
+theme: jekyll-theme-cayman
+
+author: t-ishii66
+lang: en
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - "*.bak"
+  - PROBLEMS.md
+  - "*PROBLEMS*.md"
+  - Makefile
+  - build/
+  - dist/
+  - target/
+  - node_modules/
+  - .vscode/
+  - "*.o"
+  - "*.so"
+  - "*.dylib"
+  - "*.exe"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
