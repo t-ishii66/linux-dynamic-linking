@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Sample build artifacts (Linux ELF, built on demand)
+samples/libmylib.so
+samples/main
+samples/*.o
+
+# Local-only notes (kept on disk, not committed)
+PROBLEMS.md
+*PROBLEMS*.md
+
+# Claude Code local session data
+.claude/
