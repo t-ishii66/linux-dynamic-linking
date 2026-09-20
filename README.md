@@ -49,25 +49,7 @@ trace, using the subject as our starting point.
 
 ## The Big Picture
 
-```
-   +------------------------+
-   | Kernel (Linux)         |   Parses the ELF, maps it into memory,
-   |                        |   and hands control to ld-linux.so
-   +------------------------+
-
-   +------------------------+
-   | Dynamic Linker         |   Actual file: /lib64/ld-linux-x86-64.so.2
-   | "ld-linux.so"          |   Loads dependent libraries and does symbol resolution
-   +------------------------+
-
-   +------------------------+
-   | main (ELF)             |   The executable we wrote
-   +------------------------+
-
-   +------------------------+
-   | libmylib.so (ELF)      |   The shared library we wrote
-   +------------------------+
-```
+![The cast is the kernel, the dynamic linker, the executable main, and the shared library libmylib.so](images/fig/en/readme-1-overview.svg)
 
 ## Table of Contents
 
