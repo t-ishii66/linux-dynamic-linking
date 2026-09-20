@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 250" width="860" height="250" role="img" aria-label="init_array is an array of void function pointers, called in order from the top">
+  <title>Structure of .init_array</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="250" fill="#ffffff"/>
+  <text class="cap" x="60" y="30">.init_array</text>
+  <text class="s" x="60" y="50">DT_INIT_ARRAYSZ bytes starting at what DT_INIT_ARRAY points to</text>
+
+  <g stroke="#059669" stroke-width="1.5" fill="#ecfdf5">
+    <rect x="60" y="66"  width="320" height="38"/>
+    <rect x="60" y="104" width="320" height="38"/>
+  </g>
+  <rect x="60" y="142" width="320" height="34" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <text class="mono" x="78" y="90">fn1 : void(*)(void)</text>
+  <text class="mono" x="78" y="128">fn2 : void(*)(void)</text>
+  <text class="mono" x="78" y="164">...</text>
+
+  <text class="s" x="404" y="90">called in order from the top</text>
+  <text class="s" x="404" y="164">entry count = DT_INIT_ARRAYSZ / 8</text>
+
+  <text class="s" x="60" y="212">Each entry is an 8-byte function pointer. Functions marked __attribute__((constructor))</text>
+  <text class="s" x="60" y="232">and constructors of C++ static-storage objects end up here.</text>
+</svg>

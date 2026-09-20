@@ -37,19 +37,7 @@ Step 5 で、`add` の実行時の VA は `base_libmylib + 0x10f9`
 
 この方針を図にすると:
 
-```
-                        (initially: box holds a placeholder
-                         that routes to the resolver;
-                         on the first call: the resolver
-                         writes add's actual VA here)
-                             |
-                             v
-     +--------+           +-----+            +-----------+
-     |  main  |---call--->| box |----jmp---->|    add    |
-     +--------+           +-----+            +-----------+
-                       (indirect jump:
-                        jump to the address stored in the box)
-```
+![main の call は box を経由する間接ジャンプで add に到達する](../../images/fig/ja/06-1-indirect-call.svg)
 
 box の初期値は **アドレス解決ルーチン (resolver)** に到達する経路になっている。
 1 回目の call でこの経路が起動し、resolver が `add` の実 VA を求めて box に
@@ -69,21 +57,7 @@ box の初期値は **アドレス解決ルーチン (resolver)** に到達す�
 
 ## 全体図
 
-```
-   .text (RX)                 .plt (RX)              .got.plt (RW)
-   +----------------+         +-----------+          +-------------+
-   | main:          |         | PLT0:     |          | [0] &.dynamic|
-   |   ...          |         |   ...     |          | [1] link_map |
-   |   call add@plt | -.      |   ...     |          | [2] resolver |
-   |   ...          |  |      +-----------+          +-------------+
-   +----------------+  |      | add@plt:  |          | [3] add 用   |<--,
-                       '----->|   jmp *[ ]|---,      +-------------+   |
-                              |   push N  |   |      | [4] printf 用 |   |
-                              |   jmp PLT0|   |      +-------------+   |
-                              +-----------+   |                        |
-                                              +------------------------'
-                                              "add の実アドレスを読む"
-```
+![.text の call add@plt が .plt のスタブへ進み、スタブが .got.plt のスロットを読む](../../images/fig/ja/06-2-overview.svg)
 
 要点:
 
@@ -109,22 +83,7 @@ box の初期値は **アドレス解決ルーチン (resolver)** に到達す�
 `.got.plt` は uint64 の配列。**先頭3つは予約**、4つ目以降が
 1関数につき1スロット:
 
-```
-   .got.plt:
-   +--------------------------+
-   | [0]  &.dynamic           |   .dynamic セクションのアドレス (静的リンカが書き込む)
-   +--------------------------+
-   | [1]  link_map ポインタ    |   ld-linux.so が起動時に書き込む (link_map は Step 7 で詳述)
-   +--------------------------+
-   | [2]  _dl_runtime_resolve |   ld-linux.so が起動時に書き込む
-   |                          |   = アドレス解決ルーチン (resolver) 本体のアドレス
-   +--------------------------+
-   | [3]  add のアドレス       |   ←初期値は PLT 内を指す "add@plt+6" 
-   +--------------------------+
-   | [4]  printf のアドレス    |   (もし printf を使っていれば。)
-   +--------------------------+
-   | ...                      |
-```
+![.got.plt は先頭 3 つが予約スロット、4 つ目以降が 1 関数につき 1 スロット](../../images/fig/ja/06-3-got-plt-layout.svg)
 
 `[1]` と `[2]` は ld-linux.so が **link map (後述)を組んでから** 書き込む。
 `[3]` 以降は **PLT が解決される時** (= **関数初回呼出し時** ) に書き換わる。
@@ -187,24 +146,7 @@ PLT スタブは関数ごとに 1 個ずつ `.plt` に並んでいる。3 命令
 関数ごとに違うのは `jmp *[ ]` が参照する GOT スロットと、`push N` で
 積む値 (= その関数用の reloc index) だけ:
 
-```
-   .plt:
-   +--------------+
-   | PLT0:        |
-   |   ...        |
-   +--------------+
-   | add@plt:     |
-   |   jmp *[ ]   |    <-- .got.plt[3] を参照
-   |   push 0x0   |    <-- reloc index 0 (add を意味する)
-   |   jmp PLT0   |
-   +--------------+
-   | printf@plt:  |
-   |   jmp *[ ]   |    <-- .got.plt[4] を参照
-   |   push 0x1   |    <-- reloc index 1 (printf を意味する)
-   |   jmp PLT0   |
-   +--------------+
-        ...             (使う関数の数だけ並ぶ)
-```
+![.plt には 3 命令のスタブが関数ごとに並ぶ](../../images/fig/ja/06-4-plt-layout.svg)
 
 (題材の `main` は `add` のみ呼ぶので、実際は PLT0 と add@plt の 2 エントリ
 だけ。上の printf@plt は「別の関数も呼んでいたらどうなるか」のパターン例示。)

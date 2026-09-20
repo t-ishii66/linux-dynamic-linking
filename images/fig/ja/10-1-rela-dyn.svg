@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" role="img" aria-label="rela.dyn は24バイトのエントリの配列で、各エントリが r_offset、r_info、r_addend を持つ">
+  <title>.rela.dyn の構造</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="900" height="430" fill="#ffffff"/>
+  <text class="cap" x="60" y="30">.rela.dyn</text>
+  <text class="s" x="60" y="50">DT_RELA が指す位置から DT_RELASZ バイト分の領域 / 各エントリ 24 バイト = DT_RELAENT</text>
+
+  <g stroke="#d97706" stroke-width="1.5" fill="#fffbeb">
+    <rect x="60" y="66"  width="330" height="70"/>
+    <rect x="60" y="136" width="330" height="70"/>
+    <rect x="60" y="206" width="330" height="70"/>
+  </g>
+  <text class="mono" x="78" y="88">r_offset = 0x21d8</text>
+  <text class="mono" x="78" y="108">r_info   = R_X86_64_RELATIVE</text>
+  <text class="mono" x="78" y="128">r_addend = 0x1e10</text>
+  <text class="s" x="414" y="108">entry [0]</text>
+
+  <text class="mono" x="78" y="158">r_offset = 0x21e0</text>
+  <text class="mono" x="78" y="178">r_info   = R_X86_64_RELATIVE</text>
+  <text class="mono" x="78" y="198">r_addend = 0x1e30</text>
+  <text class="s" x="414" y="178">entry [1]</text>
+
+  <text class="mono" x="78" y="228">r_offset = 0x21e8</text>
+  <text class="mono" x="78" y="248">r_info   = R_X86_64_RELATIVE</text>
+  <text class="mono" x="78" y="268">r_addend = 0x1e50</text>
+  <text class="s" x="414" y="248">entry [2]</text>
+
+  <rect x="60" y="276" width="330" height="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <text class="mono" x="78" y="296">...</text>
+
+  <rect x="60" y="306" width="330" height="70" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text class="mono" x="78" y="328">r_offset = ...</text>
+  <text class="mono" x="78" y="348">r_info   = R_X86_64_RELATIVE</text>
+  <text class="mono" x="78" y="368">r_addend = ...</text>
+  <text class="s" x="414" y="348">entry [N-1]</text>
+
+  <text class="mono" x="60" y="404">N = DT_RELASZ / DT_RELAENT = DT_RELASZ / 24</text>
+  <text class="s" x="60" y="422">数値は典型的な例。実際の glibc ld-linux.so では数百エントリある。</text>
+</svg>

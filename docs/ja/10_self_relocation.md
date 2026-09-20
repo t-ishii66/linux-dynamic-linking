@@ -53,33 +53,7 @@ typedef struct {
 
 これが `.rela.dyn` に配列として並ぶ:
 
-```
-   .rela.dyn   (DT_RELA が指す位置から DT_RELASZ バイト分の領域)
-               (各エントリ 24 バイト = DT_RELAENT)
-
-       +-----------------------------+
-       | r_offset = 0x21d8           |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [0]
-       | r_addend = 0x1e10           |
-       +-----------------------------+
-       | r_offset = 0x21e0           |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [1]
-       | r_addend = 0x1e30           |
-       +-----------------------------+
-       | r_offset = 0x21e8           |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [2]
-       | r_addend = 0x1e50           |
-       +-----------------------------+
-       :                             :
-       +-----------------------------+
-       | r_offset = ...              |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [N-1]
-       | r_addend = ...              |
-       +-----------------------------+
-
-   N = DT_RELASZ / DT_RELAENT = DT_RELASZ / 24
-   (数値は典型的な例。実際の glibc ld-linux.so では数百エントリある。)
-```
+![rela.dyn は 24 バイトのエントリの配列で、各エントリが r_offset、r_info、r_addend を持つ](../../images/fig/ja/10-1-rela-dyn.svg)
 
 再配置エントリ全般の話 (`r_info` の分解、他の再配置型など) は
 Step 6 で扱う。本付録では「書き換える場所と方法を並べた配列」として

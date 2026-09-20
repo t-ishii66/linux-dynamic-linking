@@ -23,17 +23,7 @@ This appendix builds them up in order with the minimal example of
 On x86-64, the stack grows **from higher addresses toward lower
 addresses**. When you `push` a new value, the address decreases:
 
-```
-   high address
-       +------+
-       | A    |   <-- pushed first
-       +------+
-       | B    |   <-- pushed next
-       +------+
-       | C    |   <-- pushed last (= current top)
-       +------+
-   low address
-```
+![The stack grows from high addresses toward low ones, and the last value pushed is on top](../../images/fig/en/09-1-stack-push-order.svg)
 
 In the figure, "what was pushed earlier" is at the top, and "what was
 pushed later" comes at the bottom.
@@ -77,26 +67,7 @@ The program did not push them itself.
 The stack the kernel prepares when `./main` is started with no arguments
 (assuming a single environment variable `PATH=/usr/bin` as well):
 
-```
-   high address
-       +-----------------------------+
-       | (string bodies: ./main\0,   |
-       |  PATH=...\0, etc.)          |
-       +-----------------------------+
-       | auxv: AT_NULL, 0            |
-       | auxv: ... contents ...      |  <-- passes ELF info to ld-linux.so
-       | auxv: AT_PHDR, ...          |
-       +-----------------------------+
-       | envp[1] = NULL              |
-       | envp[0] = (address of PATH...) |
-       +-----------------------------+
-       | argv[1] = NULL              |
-       | argv[0] = (address of ./main)  |
-       +-----------------------------+
-       | argc                        |  <-- RSP
-       +-----------------------------+
-   low address
-```
+![The startup stack in outline](../../images/fig/en/09-2-initial-stack-simple.svg)
 
 Structural key points:
 
@@ -137,35 +108,7 @@ The contents of the Auxiliary Vector (auxv).
 
 Reproducing the stack figure of Step 3:
 
-```
-   high address
-       +------------------------------+
-       | (env string data)             |   "PATH=/usr/bin\0"  and so on
-       | (arg string data)             |   "./main\0"
-       +------------------------------+
-       | Auxiliary Vector (auxv)      |
-       |   AT_NULL,  0                |
-       |   ...                        |
-       |   AT_ENTRY, base_main+0x1050 |   (= actual VA, base added because of PIE)
-       |   AT_BASE,  base_ld          |
-       |   AT_PHNUM, 13               |
-       |   AT_PHENT, 56               |
-       |   AT_PHDR,  &main_phdr       |
-       +------------------------------+
-       | envp[N] = NULL               |
-       | envp[N-1] = "PATH=..."       |
-       | ...                          |
-       | envp[0]                      |
-       +------------------------------+
-       | argv[argc] = NULL            |
-       | argv[argc-1]                 |
-       | ...                          |
-       | argv[0] = "./main"           |
-       +------------------------------+
-       | argc                         |   <-- RSP is pointing here
-       +------------------------------+
-   low address
-```
+![The startup stack in detail, with AT_ENTRY, AT_BASE, AT_PHNUM, AT_PHENT and AT_PHDR in auxv](../../images/fig/en/09-3-initial-stack-detail.svg)
 
 Correspondence:
 

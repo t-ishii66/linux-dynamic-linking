@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" role="img" aria-label="got.plt is an array of uint64: the first three are reserved, and from the fourth on there is one slot per function">
+  <title>Inside .got.plt: the first three are reserved, [3] on are function slots</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;fill:#0f172a}
+    .cap{font-size:13px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+    .tag{font-size:11.5px;font-weight:600;fill:#64748b}
+  </style>
+  <rect width="900" height="340" fill="#ffffff"/>
+  <text class="cap" x="40" y="28">.got.plt   (array of uint64)</text>
+
+  <!-- reserved bracket -->
+  <path d="M32 42 L24 42 L24 180 L32 180" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+  <text class="tag" x="18" y="115" text-anchor="middle" transform="rotate(-90 18 115)">3 reserved slots</text>
+
+  <!-- slots -->
+  <g stroke="#94a3b8" stroke-width="1.4">
+    <rect x="40" y="42"  width="300" height="46" fill="#f1f5f9"/>
+    <rect x="40" y="88"  width="300" height="46" fill="#f1f5f9"/>
+    <rect x="40" y="134" width="300" height="46" fill="#f1f5f9"/>
+  </g>
+  <g stroke="#d97706" stroke-width="1.6">
+    <rect x="40" y="180" width="300" height="46" fill="#fef3c7"/>
+    <rect x="40" y="226" width="300" height="46" fill="#fffbeb"/>
+  </g>
+  <rect x="40" y="272" width="300" height="34" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 3"/>
+
+  <text class="mono" x="58" y="71">[0]  &amp;.dynamic</text>
+  <text class="mono" x="58" y="117">[1]  link_map pointer</text>
+  <text class="mono" x="58" y="163">[2]  _dl_runtime_resolve</text>
+  <text class="mono" x="58" y="209">[3]  address of add</text>
+  <text class="mono" x="58" y="255">[4]  address of printf</text>
+  <text class="mono" x="58" y="294">...</text>
+
+  <!-- annotations -->
+  <text class="s" x="366" y="71">Address of the .dynamic section (written by the static linker)</text>
+  <text class="s" x="366" y="110">Written at startup by ld-linux.so</text>
+  <text class="s" x="366" y="128">(link_map is detailed in Step 7)</text>
+  <text class="s" x="366" y="156">Written at startup by ld-linux.so</text>
+  <text class="s" x="366" y="174">= the address of the address-resolution routine (resolver) itself</text>
+  <text class="s" x="366" y="203">Initial value is add@plt+6, pointing back into the PLT</text>
+  <text class="s" x="366" y="221">Overwritten with the real address on the first call</text>
+  <text class="s" x="366" y="255">(if printf is being used)</text>
+  <text class="s" x="366" y="294">as many entries as functions used</text>
+
+</svg>

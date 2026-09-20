@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 330" width="940" height="330" role="img" aria-label="Each .dynamic entry holds d_val as an integer or d_ptr as an address, depending on the tag">
+  <title>Real .dynamic entries and reading d_val vs d_ptr</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="940" height="330" fill="#ffffff"/>
+  <text class="cap" x="40" y="30">.dynamic  (array of Elf64_Dyn)</text>
+
+  <g stroke="#7c3aed" stroke-width="1.5">
+    <rect x="40"  y="42"  width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="42"  width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="76"  width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="76"  width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="110" width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="110" width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="144" width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="144" width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="178" width="140" height="34" fill="#fffbeb"/>
+    <rect x="180" y="178" width="200" height="34" fill="#fffbeb"/>
+    <rect x="40"  y="212" width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="212" width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="246" width="140" height="34" fill="#ede9fe"/>
+    <rect x="180" y="246" width="200" height="34" fill="#ede9fe"/>
+  </g>
+  <text class="mono" x="56" y="64">DT_NEEDED</text>
+  <text class="mono" x="56" y="98">DT_NEEDED</text>
+  <text class="mono" x="56" y="132">DT_RUNPATH</text>
+  <text class="mono" x="56" y="166">...</text>
+  <text class="mono" x="56" y="200">DT_STRTAB</text>
+  <text class="mono" x="56" y="234">...</text>
+  <text class="mono" x="56" y="268">DT_NULL</text>
+
+  <text class="mono" x="198" y="64">d_val = 107</text>
+  <text class="mono" x="198" y="98">d_val = 119</text>
+  <text class="mono" x="198" y="132">d_val = 152</text>
+  <text class="mono" x="198" y="166">...</text>
+  <text class="mono" x="198" y="200">d_ptr = 0x478</text>
+  <text class="mono" x="198" y="234">...</text>
+  <text class="mono" x="198" y="268">0</text>
+
+  <text class="s" x="404" y="64">integer — offset into .dynstr pointing to a library name</text>
+  <text class="s" x="404" y="98">integer — same (the second dependency)</text>
+  <text class="s" x="404" y="132">integer — offset pointing to a library search path</text>
+  <text class="s" x="404" y="200">address — location of .dynstr</text>
+  <text class="s" x="404" y="268">terminator</text>
+
+  <text class="s" x="40" y="308">The same 8 bytes: read as an integer when the tag says d_val, as an address when it says d_ptr.</text>
+</svg>

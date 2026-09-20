@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 280" width="860" height="280" role="img" aria-label="resolver 到達時のスタックには main の戻り先、reloc index、link_map ポインタが積まれている">
+  <title>resolver 到達時点のスタック</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="280" fill="#ffffff"/>
+  <text class="cap" x="60" y="34">高アドレス</text>
+
+  <rect x="60" y="42" width="280" height="42" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="78" y="68">main の戻り先</text>
+  <text class="s" x="364" y="68">T0 で main が push</text>
+
+  <rect x="60" y="84" width="280" height="42" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="78" y="110">reloc index = 0</text>
+  <text class="s" x="364" y="110">T2 で add@plt が push</text>
+
+  <rect x="60" y="126" width="280" height="42" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+  <text class="mono" x="78" y="152">link_map ptr</text>
+  <text class="s" x="364" y="146">T4 で PLT0 が push</text>
+  <text class="s" x="364" y="164">スタック先頭 = RSP</text>
+
+  <rect x="60" y="168" width="280" height="42" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <text class="mono" x="78" y="194">...</text>
+  <text class="s" x="364" y="194">RSP より下は未使用領域</text>
+
+  <text class="cap" x="60" y="238">低アドレス</text>
+  <text class="s" x="60" y="264">resolver はこの 2 つの引数 (link_map, reloc index) を受け取って add の実 VA を求める。</text>
+</svg>

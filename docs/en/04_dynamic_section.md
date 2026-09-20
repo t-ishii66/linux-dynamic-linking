@@ -32,45 +32,12 @@ address" is fixed. The array terminates at `d_tag == DT_NULL (0)`.
 Put differently, the body of `.dynamic` is an array of `Elf64_Dyn`
 lined up in the region that `PT_DYNAMIC`'s `p_vaddr` points to:
 
-```
-   +---- Region pointed to by PT_DYNAMIC (Program header)'s p_vaddr ----+
-   |                                                                    |
-   |   .dynamic  (array of Elf64_Dyn)                                   |
-   |                                                                    |
-   |   +------+------------------+                                      |
-   |   | tag1 | d_val1 or d_ptr1 |                                      |
-   |   +------+------------------+                                      |
-   |   | tag2 | d_val2 or d_ptr2 |                                      |
-   |   +------+------------------+                                      |
-   |   |  ... |       ...        |                                      |
-   |   +------+------------------+                                      |
-   |   |  0   |        0         |   <-- DT_NULL terminator             |
-   |   +------+------------------+                                      |
-   |                                                                    |
-   +--------------------------------------------------------------------+
-```
+![The region pointed to by PT_DYNAMIC p_vaddr holds an array of Elf64_Dyn terminated by DT_NULL](../../images/fig/en/04-1-pt-dynamic.svg)
 
 Filling in the actual entries into `.dynamic` of the subject `main`
 (excerpt):
 
-```
-   .dynamic  (array of Elf64_Dyn)
-   +------------+------------------+
-   | DT_NEEDED  |  d_val = 107     |   <-- integer (offset pointing to a library name)
-   +------------+------------------+
-   | DT_NEEDED  |  d_val = 119     |   <-- integer (offset pointing to a library name)
-   +------------+------------------+
-   | DT_RUNPATH |  d_val = 152     |   <-- integer (offset pointing to a library search path, discussed below)
-   +------------+------------------+
-   |    ...     |       ...        |
-   +------------+------------------+
-   | DT_STRTAB  |  d_ptr = 0x478   |   <-- address (location of .dynstr, discussed below)
-   +------------+------------------+
-   |    ...     |       ...        |
-   +------------+------------------+
-   |  DT_NULL   |        0         |   <-- terminator
-   +------------+------------------+
-```
+![Each .dynamic entry holds d_val as an integer or d_ptr as an address, depending on the tag](../../images/fig/en/04-2-dynamic-entries.svg)
 
 `DT_NEEDED` holds an integer, `DT_STRTAB` holds an address. Combining
 these two to extract the dependent library name `"libmylib.so"` is the
@@ -202,25 +169,7 @@ We mmap'd `libmylib.so`. The second `DT_NEEDED`, `libc.so.6`, is loaded
 by the same procedure (integer offset → name in `.dynstr` → search →
 `mmap`). As a result, the virtual address space is:
 
-```
-   base_main      +-----------------------------+
-                  | main (all PT_LOADs)          |
-                  +-----------------------------+
-
-   base_libmylib  +-----------------------------+
-                  | libmylib.so (all PT_LOADs)   |  <-- newly mmap'd
-                  |   .text (machine code of add)|
-                  |   .dynamic, .dynsym, ...    |
-                  +-----------------------------+
-
-   base_libc      +-----------------------------+
-                  | libc.so.6 (all PT_LOADs)     |  <-- also mmap'd
-                  +-----------------------------+
-
-   base_ld        +-----------------------------+
-                  | ld-linux.so                 |
-                  +-----------------------------+
-```
+![Following DT_NEEDED, libmylib.so and libc.so.6 are mmapped at their own bases](../../images/fig/en/04-3-mapped-objects.svg)
 
 ### How each base is determined
 

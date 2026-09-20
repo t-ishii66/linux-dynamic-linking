@@ -10,28 +10,7 @@ structure of a program header (`Elf64_Phdr`).
 
 ## The whole-file picture
 
-```
-   offset 0
-       +------------------------+
-       |  Elf64_Ehdr (64B)      |
-       +------------------------+ <-- e_phoff
-       |  Elf64_Phdr [0]        | \
-       |  Elf64_Phdr [1]        |  |
-       |  ...                   |  > 13 entries (e_phnum), 56B each (e_phentsize)
-       |  Elf64_Phdr [12]       | /
-       +------------------------+
-       |                        |
-       |  data body             |
-       |  .text, .rodata, .data,|
-       |  .dynamic, .plt, .got, |
-       |  .dynsym, .dynstr,     |
-       |  .gnu.hash, ...        |
-       |                        |
-       +------------------------+
-       |  Section headers       |
-       +------------------------+
-   end
-```
+![The program header table holds e_phnum entries of e_phentsize bytes each](../../images/fig/en/02-1-file-layout.svg)
 
 A program header is a 56-byte struct (`Elf64_Phdr`), and it represents
 either **a region loaded into memory** or **a region that conveys
@@ -188,37 +167,7 @@ Placing the 4 `PT_LOAD`s side by side:
 Turning this into a picture (the 4 `PT_LOAD`s in the file being placed
 into the virtual address space via the kernel's `mmap`):
 
-```
-   FILE (on disk)                       MEMORY (after mmap by kernel)
-   ==============                       =============================
-
-   offset 0x0000                        vaddr 0x0000 + base_main
-       +-----------------+                  +-----------------+
-       | ELF header      |                  | ELF header etc. |
-       | Program headers | ---LOAD#1--->    | (R only)        |
-       | INTERP string   |                  |                 |
-       | .note ...       |                  |                 |
-       +-----------------+                  +-----------------+
-   offset 0x1000                        vaddr 0x1000 + base_main
-       +-----------------+                  +-----------------+
-       | .plt            |                  | .plt            |
-       | .text (code)    | ---LOAD#2--->    | .text           |  R-X
-       |  (add@plt ...)  |                  |  (add@plt ...)  |
-       +-----------------+                  +-----------------+
-   offset 0x2000                        vaddr 0x2000 + base_main
-       +-----------------+                  +-----------------+
-       | .rodata         | ---LOAD#3--->    | .rodata         |  R--
-       | .eh_frame       |                  |                 |
-       +-----------------+                  +-----------------+
-   offset 0x2da0                        vaddr 0x3da0 + base_main
-       +-----------------+                  +-----------------+
-       | .init_array     |                  | .init_array     |
-       | .dynamic        | ---LOAD#4--->    | .dynamic        |  RW-
-       | .got  .got.plt  |                  | .got  .got.plt  |
-       | .data           |                  | .data           |
-       |                 |                  | .bss   (zero)   | <-- p_memsz is
-       +-----------------+                  +-----------------+     8 bytes larger
-```
+![Four regions of the file are each mapped into memory as a PT_LOAD with its own permissions](../../images/fig/en/02-2-file-to-memory.svg)
 
 LOAD#4 is the only one where `p_offset (0x2da0)` and `p_vaddr (0x3da0)`
 are **misaligned**. This is an instruction that says, "on file, place it
@@ -320,35 +269,7 @@ Summarizing what the kernel does immediately after `./main` is executed:
 That is the kernel's part. From here on, ld-linux.so is in motion.
 At this point the VA space looks like this:
 
-```
-   virtual address space (example)
-
-       low   +-------------------------+
-             |                         |
-             | (empty)                 |
-             |                         |
-   base_main +-------------------------+ <-- determined by ASLR
-             | main: LOAD#1 R--        |
-             +-------------------------+
-             | main: LOAD#2 R-X .text  |
-             +-------------------------+
-             | main: LOAD#3 R-- .rodata|
-             +-------------------------+
-             | main: LOAD#4 RW- .got   |
-             |              .data .bss |
-             +-------------------------+
-             |                         |
-             | (empty)                 |
-             |                         |
-   base_ld   +-------------------------+ <-- also determined by ASLR
-             | ld-linux.so: LOAD#1 R-X |
-             +-------------------------+
-             | ld-linux.so: LOAD#2 RW- |
-             +-------------------------+
-             |                         |
-             :                         :
-       high
-```
+![The address space holds the PT_LOADs of main and ld-linux.so, each from an ASLR-determined base](../../images/fig/en/02-3-address-space.svg)
 
 ---
 

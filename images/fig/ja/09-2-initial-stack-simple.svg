@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 392" width="860" height="392" role="img" aria-label="起動時スタックは低位から argc、argv、envp、auxv、文字列実体の順に並ぶ">
+  <title>起動時スタックの概略</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="392" fill="#ffffff"/>
+  <text class="cap" x="80" y="34">高アドレス</text>
+
+  <rect x="80" y="42" width="340" height="52" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text class="s" x="98" y="64">(文字列の実体)</text>
+  <text class="mono" x="98" y="86">./main\0,  PATH=...\0 など</text>
+
+  <rect x="80" y="94" width="340" height="80" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text class="mono" x="98" y="116">auxv: AT_NULL, 0</text>
+  <text class="mono" x="98" y="138">auxv: ... 中身 ...</text>
+  <text class="mono" x="98" y="160">auxv: AT_PHDR, ...</text>
+  <text class="s" x="444" y="138">ELF 情報を ld-linux.so に渡す</text>
+
+  <rect x="80" y="174" width="340" height="52" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="98" y="196">envp[1] = NULL</text>
+  <text class="mono" x="98" y="218">envp[0] = (PATH... の番地)</text>
+
+  <rect x="80" y="226" width="340" height="52" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="98" y="248">argv[1] = NULL</text>
+  <text class="mono" x="98" y="270">argv[0] = (./main の番地)</text>
+
+  <rect x="80" y="278" width="340" height="34" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+  <text class="mono" x="98" y="300">argc</text>
+  <text class="s" x="444" y="300">RSP</text>
+
+  <text class="cap" x="80" y="348">低アドレス</text>
+  <text class="s" x="80" y="376">カーネルが execve の中でこの形に積んでから制御を渡す。</text>
+</svg>

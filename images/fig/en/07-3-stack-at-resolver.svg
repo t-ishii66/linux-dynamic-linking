@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 280" width="860" height="280" role="img" aria-label="On reaching the resolver the stack holds main's return address, the reloc index and the link_map pointer">
+  <title>The stack on reaching the resolver</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="280" fill="#ffffff"/>
+  <text class="cap" x="60" y="34">high address</text>
+
+  <rect x="60" y="42" width="280" height="42" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="78" y="68">main's return addr</text>
+  <text class="s" x="364" y="68">pushed by main at T0</text>
+
+  <rect x="60" y="84" width="280" height="42" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="78" y="110">reloc index = 0</text>
+  <text class="s" x="364" y="110">pushed by add@plt at T2</text>
+
+  <rect x="60" y="126" width="280" height="42" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+  <text class="mono" x="78" y="152">link_map ptr</text>
+  <text class="s" x="364" y="146">pushed by PLT0 at T4</text>
+  <text class="s" x="364" y="164">top of stack = RSP</text>
+
+  <rect x="60" y="168" width="280" height="42" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <text class="mono" x="78" y="194">...</text>
+  <text class="s" x="364" y="194">region below RSP is unused</text>
+
+  <text class="cap" x="60" y="238">low address</text>
+  <text class="s" x="60" y="264">The resolver takes these two arguments (link_map, reloc index) and finds add's actual VA.</text>
+</svg>

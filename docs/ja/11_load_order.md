@@ -11,28 +11,7 @@ libc.so.6 → ld-linux.so`) は、いったいどこから来たのか。本付�
 
 ## 全体の流れ
 
-```
-   [ビルド時]
-      開発者              gcc ... -lmylib      (どの .so を、どの順で使うか)
-         │
-         ▼
-      静的リンカ ld       main の .dynamic に DT_NEEDED を順に書く
-         │
-         ▼
-   ── ELF ファイルに固定される ─────────────────────────────────
-
-   [起動時]
-      ld-linux.so         DT_NEEDED を依存の順にロード
-         │
-         ▼
-                          main の lookup scope 表を作る
-                          [0] main → [1] libmylib.so → [2] libc.so.6 → [3] ld-linux.so
-         │
-         ▼
-   [初回関数呼び出し時]
-      resolver            lookup scope を上から順に .dynsym で検索
-                          → libmylib.so で add を発見
-```
+![ビルド時のリンク指定が DT_NEEDED として固定され、起動時のロード順と lookup scope を決める](../../images/fig/ja/11-1-load-order-flow.svg)
 
 以下、それぞれの段階を詳しく見る。
 

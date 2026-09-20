@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" width="900" height="330" role="img" aria-label="Control chains from ld-linux.so to _start, __libc_start_main, main and add">
+  <title>The call chain that gets control to add</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;fill:#0f172a}
+    .cap{font-size:12px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.7;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="900" height="330" fill="#ffffff"/>
+
+  <rect x="40" y="36" width="190" height="38" rx="5" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="135" y="60" text-anchor="middle">ld-linux.so</text>
+
+  <rect x="290" y="36" width="190" height="38" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="385" y="60" text-anchor="middle">_start</text>
+  <text class="s" x="496" y="60">= main's e_entry</text>
+  <path class="a" d="M230 55 L286 55"/>
+  <text class="cap" x="258" y="46" text-anchor="middle">jump</text>
+
+  <rect x="290" y="110" width="230" height="38" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="405" y="134" text-anchor="middle">__libc_start_main</text>
+  <path class="a" d="M330 74 L330 106"/>
+  <text class="cap" x="342" y="96">call</text>
+
+  <rect x="350" y="184" width="190" height="38" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="445" y="208" text-anchor="middle">main()</text>
+  <path class="a" d="M390 148 L390 180"/>
+  <text class="cap" x="402" y="170">call</text>
+
+  <rect x="410" y="258" width="190" height="38" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="1.8"/>
+  <text class="mono" x="505" y="282" text-anchor="middle">add(2, 3)</text>
+  <path class="a" d="M450 222 L450 254"/>
+  <text class="cap" x="462" y="244">call</text>
+
+  <text class="s" x="620" y="282">The territory of Step 6, 7</text>
+</svg>

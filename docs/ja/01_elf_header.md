@@ -16,38 +16,7 @@ ELF (Executable and Linkable Format) は Linux/Unix 系で使われる
 
 ファイルの先頭から順に並んでいるイメージ:
 
-```
-   offset 0
-       +------------------------+
-       |  ELF header            |   64 bytes 固定 (ELF64)
-       |  (Elf64_Ehdr)          |   Program headers / Section headers
-       |                        |   の位置を教える
-       +------------------------+
-       |                        |
-       |  Program headers       |   <-- プログラムヘッダの配列。
-       |  Elf64_Phdr * N        |  
-       |                        |   
-       +------------------------+
-       |                        |
-       |   ... segments ...     |
-       |                        |
-       |   .text     (機械語)    |
-       |   .rodata   (定数)     |
-       |   .data     (初期化済) |
-       |   .dynamic             |
-       |   .plt   .got          |
-       |   .dynsym .dynstr      |
-       |   .gnu.hash            |
-       |   ...                  |
-       |                        |
-       +------------------------+
-       |                        |
-       |  Section headers       |   <-- リンク時 / objdump用
-       |  Elf64_Shdr * M        |       実行時には使われない
-       |                        |
-       +------------------------+
-   end of file
-```
+![ELF ファイルは先頭から ELF ヘッダ、プログラムヘッダ、セグメント本体、セクションヘッダの順に並ぶ](../../images/fig/ja/01-1-elf-file-layout.svg)
 
 つまり ELF ファイルは **「先頭の64バイトが ELF header であり、ELF header の内容を元に、ファイル全体を解読できる」** ようになっている 。
 
@@ -181,32 +150,7 @@ Offset    Bytes                                            ASCII
 
 ## ELFヘッダから読み取れるファイル構造
 
-```
-   ファイル先頭                                  仮想アドレス
-   ============                                  =============
-
-   offset 0
-       +------------------------+
-       |  Elf64_Ehdr            |  64 bytes
-       |  (今読んだもの)         |
-       +------------------------+ <-- e_phoff = 0x40
-       |  Program header [0]    |  56 bytes
-       +------------------------+
-       |  Program header [1]    |  56 bytes
-       +------------------------+
-       |   ...                  |   13 個
-       +------------------------+
-       |  Program header [12]   |  56 bytes
-       +------------------------+
-       |                        |
-       :  ... 機械語、データ ...  :       <-- このどこかに、
-       :                        :          e_entry = 0x1050 で指される
-       :                        :          main の最初の命令がある
-       +------------------------+ <-- e_shoff = 0x3668
-       |  Section header table  |     (実行時は使わない)
-       +------------------------+
-   end
-```
+![e_phoff がプログラムヘッダ表を、e_shoff がセクションヘッダ表を指す](../../images/fig/ja/01-2-file-offsets.svg)
 
 ポイント:
 

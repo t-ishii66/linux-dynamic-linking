@@ -12,28 +12,7 @@ runtime search order.
 
 ## The whole flow
 
-```
-   [At build time]
-      Developer          gcc ... -lmylib      (which .so files, in what order)
-         │
-         ▼
-      Static linker ld   Writes DT_NEEDED into main's .dynamic in order
-         │
-         ▼
-   ── Fixed into the ELF file ─────────────────────────────────
-
-   [At startup]
-      ld-linux.so        Loads DT_NEEDED in dependency order
-         │
-         ▼
-                         Builds main's lookup scope table
-                         [0] main → [1] libmylib.so → [2] libc.so.6 → [3] ld-linux.so
-         │
-         ▼
-   [At the first function call]
-      resolver           Walks lookup scope from top down, searching .dynsym
-                         → finds add in libmylib.so
-```
+![The build-time link options are fixed into the ELF as DT_NEEDED and decide the runtime search order](../../images/fig/en/11-1-load-order-flow.svg)
 
 Below, each stage is examined in detail.
 

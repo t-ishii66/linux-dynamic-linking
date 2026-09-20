@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 320" width="860" height="320" role="img" aria-label="PT_DYNAMIC の p_vaddr が指す領域に Elf64_Dyn の配列があり DT_NULL で終端する">
+  <title>PT_DYNAMIC が指す領域と .dynamic の構造</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="320" fill="#ffffff"/>
+
+  <rect x="30" y="30" width="800" height="256" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-dasharray="6 3"/>
+  <text class="cap" x="50" y="54">PT_DYNAMIC (Program header) の p_vaddr が指す領域</text>
+
+  <text class="cap" x="70" y="88">.dynamic  (Elf64_Dyn の配列)</text>
+
+  <g stroke="#7c3aed" stroke-width="1.5">
+    <rect x="70"  y="102" width="110" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="102" width="230" height="34" fill="#ffffff"/>
+    <rect x="70"  y="136" width="110" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="136" width="230" height="34" fill="#ffffff"/>
+    <rect x="70"  y="170" width="110" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="170" width="230" height="34" fill="#ffffff"/>
+    <rect x="70"  y="204" width="110" height="34" fill="#ede9fe"/>
+    <rect x="180" y="204" width="230" height="34" fill="#ede9fe"/>
+  </g>
+  <text class="mono" x="88" y="124">tag1</text>
+  <text class="mono" x="198" y="124">d_val1 or d_ptr1</text>
+  <text class="mono" x="88" y="158">tag2</text>
+  <text class="mono" x="198" y="158">d_val2 or d_ptr2</text>
+  <text class="mono" x="88" y="192">...</text>
+  <text class="mono" x="198" y="192">...</text>
+  <text class="mono" x="88" y="226">0</text>
+  <text class="mono" x="198" y="226">0</text>
+  <text class="s" x="432" y="226">DT_NULL 終端</text>
+
+  <text class="s" x="70" y="266">1 エントリ 16 バイト。tag ごとに 2 つ目のフィールドを整数として読むか</text>
+  <text class="s" x="70" y="282">アドレスとして読むかが決まる。</text>
+</svg>

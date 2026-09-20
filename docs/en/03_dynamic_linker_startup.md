@@ -37,35 +37,7 @@ System V x86_64 ABI:
 reserves for the new process. It is reserved just before jumping into
 ld-linux.so, after the PT_LOADs have been mmap'd in Step 2.)
 
-```
-   high address
-       +------------------------------+
-       | (env string data)             |   "PATH=/usr/bin\0"  and so on
-       | (arg string data)             |   "./main\0"
-       +------------------------------+
-       | Auxiliary Vector (auxv)      |   <-- what the dynamic linker cares about (contents in the next section)
-       |   AT_NULL,  0                |
-       |   ...                        |
-       |   AT_ENTRY, base_main+0x1050 |   (= actual VA, base added because of PIE)
-       |   AT_BASE,  base_ld          |
-       |   AT_PHNUM, 13               |
-       |   AT_PHENT, 56               |
-       |   AT_PHDR,  &main_phdr       |
-       +------------------------------+
-       | envp[N] = NULL               |
-       | envp[N-1] = "PATH=..."       |
-       | ...                          |
-       | envp[0]                      |
-       +------------------------------+
-       | argv[argc] = NULL            |
-       | argv[argc-1]                 |
-       | ...                          |
-       | argv[0] = "./main"           |
-       +------------------------------+
-       | argc                         |   <-- RSP is pointing here
-       +------------------------------+
-   low address
-```
+![The startup stack holds, from low to high, argc, argv, envp, auxv and the string bodies](../../images/fig/en/03-1-initial-stack.svg)
 
 **Just before** jumping to ld-linux.so's `e_entry`, the kernel sets the
 `RSP` register to point at the top of this stack (the position where
@@ -206,15 +178,7 @@ Structure:
   and `DT_INIT_ARRAYSZ` gives the number of bytes
 - The content is just an array of `void (*)(void)` function pointers
 
-```
-   .init_array   (DT_INIT_ARRAYSZ bytes starting at what DT_INIT_ARRAY points to)
-       +----------------+
-       | fn1  : void(*)(void) |
-       +----------------+
-       | fn2  : void(*)(void) |
-       +----------------+
-       :                :
-```
+![init_array is an array of function pointers, called in order from the top](../../images/fig/en/03-2-init-array.svg)
 
 Once A-E are all done, `ld-linux.so` (internally `_dl_init`), **just
 before** jumping into `main`'s `_start`, walks this array **from the
@@ -275,18 +239,7 @@ does all of the above.
 In this series, we stop at the understanding that **`main()` is called
 via `_start` and then `__libc_start_main()`**, and do not chase deeper.
 
-```
-   ld-linux.so   --jump-->   _start (= main's e_entry)
-                                 |
-                                 +--call--> __libc_start_main
-                                                |
-                                                +--call--> main()
-                                                              |
-                                                              +--call--> add(2, 3)
-                                                                            ^
-                                                                            |
-                                                              The territory of Step 6, 7
-```
+![Control chains from ld-linux.so to _start, __libc_start_main, main and add](../../images/fig/en/03-3-call-chain.svg)
 
 ---
 

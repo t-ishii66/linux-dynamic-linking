@@ -34,35 +34,7 @@ Step 2 までで、カーネルは `main` と `ld-linux.so` の両方を
 確保した領域。Step 2 で PT_LOAD を mmap した後、ld-linux.so にジャンプ
 する直前に確保される。)
 
-```
-   高アドレス
-       +------------------------------+
-       | (env 文字列 の実体)            |   "PATH=/usr/bin\0"  など
-       | (arg 文字列 の実体)            |   "./main\0"
-       +------------------------------+
-       | Auxiliary Vector (auxv)      |   <-- 動的リンカが重要視する (中身は次節)
-       |   AT_NULL,  0                |
-       |   ...                        |
-       |   AT_ENTRY, base_main+0x1050 |   (= 実 VA、PIE のため base 加算)
-       |   AT_BASE,  base_ld          |
-       |   AT_PHNUM, 13               |
-       |   AT_PHENT, 56               |
-       |   AT_PHDR,  &main_phdr       |
-       +------------------------------+
-       | envp[N] = NULL               |
-       | envp[N-1] = "PATH=..."       |
-       | ...                          |
-       | envp[0]                      |
-       +------------------------------+
-       | argv[argc] = NULL            |
-       | argv[argc-1]                 |
-       | ...                          |
-       | argv[0] = "./main"           |
-       +------------------------------+
-       | argc                         |   <-- RSP はここを指している
-       +------------------------------+
-   低アドレス
-```
+![起動時スタックには低位から argc、argv、envp、auxv、文字列実体の順に積まれている](../../images/fig/ja/03-1-initial-stack.svg)
 
 カーネルは ld-linux.so の `e_entry` にジャンプする **直前**、
 `RSP` レジスタをこのスタックの先頭 (argc がある位置) に向けて
@@ -199,15 +171,7 @@ F で `ld-linux.so` が呼ぶ `.init_array` は、**各 ELF が持つ「起動�
   `DT_INIT_ARRAYSZ` がバイト数を指す
 - 中身は `void (*)(void)` 型の関数ポインタが並ぶだけ
 
-```
-   .init_array   (DT_INIT_ARRAY が指す位置から DT_INIT_ARRAYSZ バイト分)
-       +----------------+
-       | fn1  : void(*)(void) |
-       +----------------+
-       | fn2  : void(*)(void) |
-       +----------------+
-       :                :
-```
+![init_array は関数ポインタの配列で先頭から順に呼ばれる](../../images/fig/ja/03-2-init-array.svg)
 
 `ld-linux.so` (内部の `_dl_init`) は、A〜E がすべて終わった後、
 `main` の `_start` に jmp する **直前** に、この配列を **依存の葉から根へ**
@@ -262,18 +226,7 @@ F で `ld-linux.so` が呼ぶ `.init_array` は、**各 ELF が持つ「起動�
 このシリーズでは、**`_start` から `__libc_start_main()` を経由して
 `main()` が呼び出される** という理解に留め、それ以上深追いはしない。
 
-```
-   ld-linux.so   --jump-->   _start (= main の e_entry)
-                                 |
-                                 +--call--> __libc_start_main
-                                                |
-                                                +--call--> main()
-                                                              |
-                                                              +--call--> add(2, 3)
-                                                                            ^
-                                                                            |
-                                                              Step 6, 7 で扱う範囲
-```
+![ld-linux.so から _start、__libc_start_main、main、add へ呼び出しが連鎖する](../../images/fig/ja/03-3-call-chain.svg)
 
 ---
 

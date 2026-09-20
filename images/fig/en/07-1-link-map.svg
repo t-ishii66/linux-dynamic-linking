@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" role="img" aria-label="The link_map linked list, and the lookup scope search-order list pointed to by main's l_scope">
+  <title>The link_map linked list and the lookup scope</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.7;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text class="cap" x="40" y="28">link_map (linked list)</text>
+  <text class="cap" x="560" y="28">main's lookup scope</text>
+  <text class="s" x="560" y="46">= the search-order list pointed to by main's l_scope</text>
+
+  <rect x="40" y="56" width="300" height="122" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="58" y="80">main</text>
+  <text class="mono" x="76" y="102">l_addr  = base_main</text>
+  <text class="mono" x="76" y="122">l_ld    = &amp;.dynamic</text>
+  <text class="mono" x="76" y="142">l_scope</text>
+  <text class="mono" x="76" y="162">l_next</text>
+
+  <rect x="560" y="56" width="240" height="108" rx="5" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text class="mono" x="578" y="82">[0] main</text>
+  <text class="mono" x="578" y="106">[1] libmylib.so</text>
+  <text class="mono" x="578" y="130">[2] libc.so.6</text>
+  <text class="mono" x="578" y="154">[3] ld-linux.so</text>
+  <path class="a" d="M146 138 L552 138"/>
+
+  <rect x="40" y="212" width="300" height="122" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <text class="mono" x="58" y="238">libmylib.so</text>
+  <text class="mono" x="76" y="262">l_addr  = base_libmylib</text>
+  <text class="mono" x="76" y="284">l_ld    = &amp;.dynamic</text>
+  <text class="mono" x="76" y="306">l_scope</text>
+  <text class="mono" x="76" y="326">l_next</text>
+  <path class="a" d="M138 158 L196 158 L196 208"/>
+
+  <text class="s" x="40" y="372">... continues with libc.so.6, ld-linux.so</text>
+  <path class="a" d="M138 322 L196 322 L196 356"/>
+</svg>

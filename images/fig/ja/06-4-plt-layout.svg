@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 348" width="900" height="348" role="img" aria-label="plt には関数ごとに3命令のスタブが並び、参照する got スロットと push する reloc index だけが異なる">
+  <title>.plt の中身: 関数ごとに 3 命令のスタブが並ぶ</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;fill:#0f172a}
+    .cap{font-size:13px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="900" height="348" fill="#ffffff"/>
+  <text class="cap" x="40" y="28">.plt</text>
+
+  <!-- PLT0 -->
+  <rect x="40" y="42" width="320" height="50" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="58" y="64">PLT0:</text>
+  <text class="mono" x="76" y="84">...</text>
+  <text class="s" x="386" y="72">全関数共通の入口 (resolver へ向かう)</text>
+
+  <!-- add@plt -->
+  <rect x="40" y="92" width="320" height="94" rx="4" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="58" y="114">add@plt:</text>
+  <text class="mono" x="76" y="136">jmp *[ ]</text>
+  <text class="mono" x="76" y="158">push 0x0</text>
+  <text class="mono" x="76" y="180">jmp PLT0</text>
+  <text class="s" x="386" y="136">.got.plt[3] を参照</text>
+  <text class="s" x="386" y="158">reloc index 0 (add を意味する)</text>
+
+  <!-- printf@plt -->
+  <rect x="40" y="186" width="320" height="94" rx="4" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="58" y="208">printf@plt:</text>
+  <text class="mono" x="76" y="230">jmp *[ ]</text>
+  <text class="mono" x="76" y="252">push 0x1</text>
+  <text class="mono" x="76" y="274">jmp PLT0</text>
+  <text class="s" x="386" y="230">.got.plt[4] を参照</text>
+  <text class="s" x="386" y="252">reloc index 1 (printf を意味する)</text>
+
+  <!-- ... -->
+  <rect x="40" y="280" width="320" height="32" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <text class="mono" x="76" y="301">...</text>
+  <text class="s" x="386" y="301">使う関数の数だけ並ぶ</text>
+
+  <text class="s" x="40" y="338">3 命令の形は全スタブ共通。関数ごとに違うのは参照する GOT スロットと push する reloc index だけ。</text>
+</svg>

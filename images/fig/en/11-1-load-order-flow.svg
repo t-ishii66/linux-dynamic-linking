@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 990 470" width="990" height="470" role="img" aria-label="The link options given at build time are fixed into the ELF as DT_NEEDED, decide the load order and lookup scope at startup, and become the search order at the first call">
+  <title>From the build-time options to the runtime search order</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .ph{font-size:11.5px;font-weight:700;fill:#334155}
+    .actor{font-size:13.5px;font-weight:600;fill:#0f172a}
+    .s{font-size:12.5px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.8;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="990" height="470" fill="#ffffff"/>
+
+  <text class="ph" x="30" y="64">[At build time]</text>
+  <rect x="215" y="38" width="200" height="44" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="actor" x="315" y="65" text-anchor="middle">Developer</text>
+  <text class="mono" x="440" y="58">gcc ... -lmylib</text>
+  <text class="s" x="440" y="76">which .so files, in what order</text>
+
+  <path class="a" d="M315 82 L315 112"/>
+
+  <rect x="215" y="112" width="200" height="44" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="actor" x="315" y="139" text-anchor="middle">Static linker ld</text>
+  <text class="s" x="440" y="139">Writes DT_NEEDED into main's .dynamic in order</text>
+
+  <text class="s" x="30" y="190">Fixed into the ELF file</text>
+  <line x1="30" y1="198" x2="960" y2="198" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="7 4"/>
+  <path class="a" d="M315 156 L315 232"/>
+
+  <text class="ph" x="30" y="258">[At startup]</text>
+  <rect x="215" y="232" width="200" height="44" rx="5" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="actor" x="315" y="259" text-anchor="middle">ld-linux.so</text>
+  <text class="s" x="440" y="259">Loads DT_NEEDED in dependency order</text>
+
+  <path class="a" d="M315 276 L315 398"/>
+  <path class="a" d="M315 330 L436 330"/>
+
+  <rect x="440" y="300" width="500" height="62" rx="5" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text class="s" x="458" y="322">Builds main's lookup scope table</text>
+  <text class="mono" x="458" y="346">[0] main → [1] libmylib.so → [2] libc.so.6 → [3] ld-linux.so</text>
+
+  <text class="ph" x="30" y="424">[At the first function call]</text>
+  <rect x="215" y="398" width="200" height="44" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <text class="actor" x="315" y="425" text-anchor="middle">resolver</text>
+  <text class="s" x="440" y="418">Walks lookup scope from top down, searching .dynsym</text>
+  <text class="s" x="440" y="438">→ finds add in libmylib.so</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 330" width="940" height="330" role="img" aria-label="dynamic の各エントリは tag に応じて d_val を整数として、d_ptr をアドレスとして持つ">
+  <title>.dynamic の実際のエントリと d_val / d_ptr の読み分け</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="940" height="330" fill="#ffffff"/>
+  <text class="cap" x="40" y="30">.dynamic  (Elf64_Dyn の配列)</text>
+
+  <g stroke="#7c3aed" stroke-width="1.5">
+    <rect x="40"  y="42"  width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="42"  width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="76"  width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="76"  width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="110" width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="110" width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="144" width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="144" width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="178" width="140" height="34" fill="#fffbeb"/>
+    <rect x="180" y="178" width="200" height="34" fill="#fffbeb"/>
+    <rect x="40"  y="212" width="140" height="34" fill="#f5f3ff"/>
+    <rect x="180" y="212" width="200" height="34" fill="#ffffff"/>
+    <rect x="40"  y="246" width="140" height="34" fill="#ede9fe"/>
+    <rect x="180" y="246" width="200" height="34" fill="#ede9fe"/>
+  </g>
+  <text class="mono" x="56" y="64">DT_NEEDED</text>
+  <text class="mono" x="56" y="98">DT_NEEDED</text>
+  <text class="mono" x="56" y="132">DT_RUNPATH</text>
+  <text class="mono" x="56" y="166">...</text>
+  <text class="mono" x="56" y="200">DT_STRTAB</text>
+  <text class="mono" x="56" y="234">...</text>
+  <text class="mono" x="56" y="268">DT_NULL</text>
+
+  <text class="mono" x="198" y="64">d_val = 107</text>
+  <text class="mono" x="198" y="98">d_val = 119</text>
+  <text class="mono" x="198" y="132">d_val = 152</text>
+  <text class="mono" x="198" y="166">...</text>
+  <text class="mono" x="198" y="200">d_ptr = 0x478</text>
+  <text class="mono" x="198" y="234">...</text>
+  <text class="mono" x="198" y="268">0</text>
+
+  <text class="s" x="404" y="64">整数 — ライブラリ名を指す .dynstr 内オフセット</text>
+  <text class="s" x="404" y="98">整数 — 同上 (2 つ目の依存ライブラリ)</text>
+  <text class="s" x="404" y="132">整数 — ライブラリ探索パスを指すオフセット</text>
+  <text class="s" x="404" y="200">アドレス — .dynstr の位置</text>
+  <text class="s" x="404" y="268">終端</text>
+
+  <text class="s" x="40" y="308">同じ 8 バイトでも、tag が d_val なら「整数」、d_ptr なら「アドレス」として読む。</text>
+</svg>

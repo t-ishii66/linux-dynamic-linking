@@ -17,38 +17,7 @@ subject are both ELF files.
 
 Laid out from the beginning of the file, the image is:
 
-```
-   offset 0
-       +------------------------+
-       |  ELF header            |   Fixed 64 bytes (ELF64)
-       |  (Elf64_Ehdr)          |   Tells you where the Program headers
-       |                        |   and Section headers are located
-       +------------------------+
-       |                        |
-       |  Program headers       |   <-- Array of program headers.
-       |  Elf64_Phdr * N        |
-       |                        |
-       +------------------------+
-       |                        |
-       |   ... segments ...     |
-       |                        |
-       |   .text     (machine code) |
-       |   .rodata   (constants)    |
-       |   .data     (initialized)  |
-       |   .dynamic             |
-       |   .plt   .got          |
-       |   .dynsym .dynstr      |
-       |   .gnu.hash            |
-       |   ...                  |
-       |                        |
-       +------------------------+
-       |                        |
-       |  Section headers       |   <-- For linking / objdump.
-       |  Elf64_Shdr * M        |       Not used at runtime.
-       |                        |
-       +------------------------+
-   end of file
-```
+![An ELF file holds, from the top, the ELF header, program headers, segment bodies, and section headers](../../images/fig/en/01-1-elf-file-layout.svg)
 
 In other words, an ELF file is structured so that **"the first 64 bytes are the ELF header, and using the contents of the ELF header, you can decode the whole file"**.
 
@@ -189,32 +158,7 @@ read in reverse order:
 
 ## The file structure the ELF header reveals
 
-```
-   File start                                    Virtual address
-   ==========                                    ===============
-
-   offset 0
-       +------------------------+
-       |  Elf64_Ehdr            |  64 bytes
-       |  (what we just read)   |
-       +------------------------+ <-- e_phoff = 0x40
-       |  Program header [0]    |  56 bytes
-       +------------------------+
-       |  Program header [1]    |  56 bytes
-       +------------------------+
-       |   ...                  |   13 entries
-       +------------------------+
-       |  Program header [12]   |  56 bytes
-       +------------------------+
-       |                        |
-       :  ... machine code, data ... :     <-- Somewhere in here,
-       :                        :             pointed to by e_entry = 0x1050,
-       :                        :             is the first instruction of main.
-       +------------------------+ <-- e_shoff = 0x3668
-       |  Section header table  |     (not used at runtime)
-       +------------------------+
-   end
-```
+![e_phoff points at the program header table and e_shoff at the section header table](../../images/fig/en/01-2-file-offsets.svg)
 
 Key points:
 

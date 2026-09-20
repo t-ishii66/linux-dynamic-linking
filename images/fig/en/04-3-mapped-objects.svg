@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 400" width="860" height="400" role="img" aria-label="Following DT_NEEDED, libmylib.so and libc.so.6 are mmapped at their own bases">
+  <title>Objects in memory after following DT_NEEDED</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="400" fill="#ffffff"/>
+
+  <text class="cap" x="180" y="48" text-anchor="end">base_main</text>
+  <rect x="190" y="30" width="400" height="44" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="208" y="58">main (all PT_LOADs)</text>
+
+  <text class="cap" x="180" y="120" text-anchor="end">base_libmylib</text>
+  <rect x="190" y="102" width="400" height="86" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="1.8"/>
+  <text class="mono" x="208" y="126">libmylib.so (all PT_LOADs)</text>
+  <text class="mono" x="226" y="150">.text (machine code of add)</text>
+  <text class="mono" x="226" y="174">.dynamic, .dynsym, ...</text>
+  <text class="s" x="614" y="126">newly mmap'd</text>
+
+  <text class="cap" x="180" y="234" text-anchor="end">base_libc</text>
+  <rect x="190" y="216" width="400" height="44" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <text class="mono" x="208" y="244">libc.so.6 (all PT_LOADs)</text>
+  <text class="s" x="614" y="244">also mmap'd</text>
+
+  <text class="cap" x="180" y="306" text-anchor="end">base_ld</text>
+  <rect x="190" y="288" width="400" height="44" rx="5" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="208" y="316">ld-linux.so</text>
+  <text class="s" x="614" y="316">already loaded by the kernel</text>
+
+  <text class="s" x="190" y="370">Each base changes every run due to ASLR, and the ordering is not necessarily as drawn.</text>
+</svg>

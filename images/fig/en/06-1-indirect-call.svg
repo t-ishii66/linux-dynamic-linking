@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 250" width="860" height="250" role="img" aria-label="main's call reaches add through an indirect jump via the box">
+  <title>The indirect call: main to box (GOT slot) to add</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .h{font-size:17px;font-weight:600;fill:#0f172a}
+    .s{font-size:12.5px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.8;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="860" height="250" fill="#ffffff"/>
+
+  <!-- callout: what the box holds -->
+  <rect x="250" y="22" width="360" height="72" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text class="s" x="430" y="43" text-anchor="middle">initially the box holds a placeholder</text>
+  <text class="s" x="430" y="62" text-anchor="middle">that routes to the resolver; on the first call</text>
+  <text class="s" x="430" y="81" text-anchor="middle">the resolver writes add's actual VA here (Step 7)</text>
+  <path class="a" d="M430 94 L430 124"/>
+
+  <!-- main -->
+  <rect x="70" y="128" width="150" height="64" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="h mono" x="145" y="157" text-anchor="middle">main</text>
+  <text class="s" x="145" y="177" text-anchor="middle">in .text</text>
+
+  <!-- box (GOT slot) -->
+  <rect x="355" y="128" width="150" height="64" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text class="h mono" x="430" y="157" text-anchor="middle">box</text>
+
+  <!-- add -->
+  <rect x="625" y="128" width="210" height="64" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <text class="h mono" x="730" y="157" text-anchor="middle">add</text>
+  <text class="s" x="730" y="177" text-anchor="middle">the real one in libmylib.so</text>
+
+  <!-- arrows -->
+  <path class="a" d="M220 160 L351 160"/>
+  <text class="s mono" x="285" y="150" text-anchor="middle">call</text>
+  <path class="a" d="M505 160 L621 160"/>
+  <text class="s mono" x="563" y="150" text-anchor="middle">jmp</text>
+
+  <text class="s" x="430" y="222" text-anchor="middle">indirect jump: jump to the address stored in the box</text>
+</svg>

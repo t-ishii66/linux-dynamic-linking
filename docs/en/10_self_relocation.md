@@ -58,33 +58,7 @@ typedef struct {
 
 These are lined up as an array in `.rela.dyn`:
 
-```
-   .rela.dyn   (DT_RELASZ bytes of region starting where DT_RELA points)
-               (each entry 24 bytes = DT_RELAENT)
-
-       +-----------------------------+
-       | r_offset = 0x21d8           |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [0]
-       | r_addend = 0x1e10           |
-       +-----------------------------+
-       | r_offset = 0x21e0           |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [1]
-       | r_addend = 0x1e30           |
-       +-----------------------------+
-       | r_offset = 0x21e8           |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [2]
-       | r_addend = 0x1e50           |
-       +-----------------------------+
-       :                             :
-       +-----------------------------+
-       | r_offset = ...              |
-       | r_info   = R_X86_64_RELATIVE|  ← entry [N-1]
-       | r_addend = ...              |
-       +-----------------------------+
-
-   N = DT_RELASZ / DT_RELAENT = DT_RELASZ / 24
-   (Numbers are a typical example. In the actual glibc ld-linux.so there are hundreds of entries.)
-```
+![rela.dyn is an array of 24-byte entries, each holding r_offset, r_info and r_addend](../../images/fig/en/10-1-rela-dyn.svg)
 
 The general story of relocation entries (breakdown of `r_info`, other
 relocation types, etc.) is covered in Step 6. In this appendix we

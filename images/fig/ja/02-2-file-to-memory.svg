@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 520" width="980" height="520" role="img" aria-label="ファイル上の4つの領域がそれぞれ PT_LOAD としてメモリにマップされ、権限が付く">
+  <title>ファイル上の配置とカーネルによる mmap 後のメモリ配置</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;fill:#0f172a}
+    .cap{font-size:12px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .hdr{font-size:13px;font-weight:600;fill:#334155}
+    .s{font-size:12px;fill:#475569}
+    .perm{font-size:12px;font-weight:700;fill:#b45309;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .a{stroke:#334155;stroke-width:1.8;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="980" height="520" fill="#ffffff"/>
+  <text class="hdr" x="60"  y="26">FILE (on disk)</text>
+  <text class="hdr" x="640" y="26">MEMORY (after mmap by kernel)</text>
+
+  <text class="cap" x="60" y="40">offset 0x0000</text>
+  <rect x="60" y="48" width="270" height="86" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="76" y="70">ELF header</text>
+  <text class="mono" x="76" y="90">Program headers</text>
+  <text class="mono" x="76" y="110">INTERP string</text>
+  <text class="mono" x="76" y="130">.note ...</text>
+  <text class="cap" x="640" y="40">vaddr 0x0000 + base_main</text>
+  <rect x="640" y="48" width="290" height="86" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="656" y="70">ELF header etc.</text>
+  <text class="perm" x="916" y="70" text-anchor="end">R--</text>
+  <path class="a" d="M334 91 L636 91"/>
+  <text class="cap" x="485" y="84" text-anchor="middle">LOAD#1</text>
+
+  <text class="cap" x="60" y="156">offset 0x1000</text>
+  <rect x="60" y="164" width="270" height="68" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="mono" x="76" y="186">.plt</text>
+  <text class="mono" x="76" y="206">.text (code)</text>
+  <text class="mono" x="76" y="226">  (add@plt ...)</text>
+  <text class="cap" x="640" y="156">vaddr 0x1000 + base_main</text>
+  <rect x="640" y="164" width="290" height="68" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="mono" x="656" y="186">.plt</text>
+  <text class="mono" x="656" y="206">.text</text>
+  <text class="mono" x="656" y="226">  (add@plt ...)</text>
+  <text class="perm" x="916" y="186" text-anchor="end">R-X</text>
+  <path class="a" d="M334 198 L636 198"/>
+  <text class="cap" x="485" y="191" text-anchor="middle">LOAD#2</text>
+
+  <text class="cap" x="60" y="254">offset 0x2000</text>
+  <rect x="60" y="262" width="270" height="50" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text class="mono" x="76" y="284">.rodata</text>
+  <text class="mono" x="76" y="304">.eh_frame</text>
+  <text class="cap" x="640" y="254">vaddr 0x2000 + base_main</text>
+  <rect x="640" y="262" width="290" height="50" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text class="mono" x="656" y="284">.rodata</text>
+  <text class="perm" x="916" y="284" text-anchor="end">R--</text>
+  <path class="a" d="M334 287 L636 287"/>
+  <text class="cap" x="485" y="280" text-anchor="middle">LOAD#3</text>
+
+  <text class="cap" x="60" y="334">offset 0x2da0</text>
+  <rect x="60" y="342" width="270" height="92" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text class="mono" x="76" y="364">.init_array</text>
+  <text class="mono" x="76" y="384">.dynamic</text>
+  <text class="mono" x="76" y="404">.got  .got.plt</text>
+  <text class="mono" x="76" y="424">.data</text>
+  <text class="cap" x="640" y="334">vaddr 0x3da0 + base_main</text>
+  <rect x="640" y="342" width="290" height="112" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text class="mono" x="656" y="364">.init_array</text>
+  <text class="mono" x="656" y="384">.dynamic</text>
+  <text class="mono" x="656" y="404">.got  .got.plt</text>
+  <text class="mono" x="656" y="424">.data</text>
+  <text class="mono" x="656" y="446">.bss   (zero)</text>
+  <text class="perm" x="916" y="364" text-anchor="end">RW-</text>
+  <path class="a" d="M334 388 L636 388"/>
+  <text class="cap" x="485" y="381" text-anchor="middle">LOAD#4</text>
+
+  <text class="s" x="60" y="476">.bss はファイルに実体を持たない。p_memsz が p_filesz より 8 bytes 大きく、</text>
+  <text class="s" x="60" y="494">その差分をカーネルがゼロで埋める。</text>
+</svg>

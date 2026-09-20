@@ -38,19 +38,7 @@ So the strategy we adopt is:
 
 Turning this strategy into a picture:
 
-```
-                        (initially: box holds a placeholder
-                         that routes to the resolver;
-                         on the first call: the resolver
-                         writes add's actual VA here)
-                             |
-                             v
-     +--------+           +-----+            +-----------+
-     |  main  |---call--->| box |----jmp---->|    add    |
-     +--------+           +-----+            +-----------+
-                       (indirect jump:
-                        jump to the address stored in the box)
-```
+![main reaches add through an indirect jump via the box](../../images/fig/en/06-1-indirect-call.svg)
 
 The initial value of the box is a route that ends up at the
 **address-resolution routine (resolver)**. The first `call` fires along
@@ -72,21 +60,7 @@ to an entry in `.got.plt`.)
 
 ## The big picture
 
-```
-   .text (RX)                 .plt (RX)              .got.plt (RW)
-   +----------------+         +-----------+          +--------------+
-   | main:          |         | PLT0:     |          | [0] &.dynamic |
-   |   ...          |         |   ...     |          | [1] link_map  |
-   |   call add@plt | -.      |   ...     |          | [2] resolver  |
-   |   ...          |  |      +-----------+          +--------------+
-   +----------------+  |      | add@plt:  |          | [3] for add   |<--,
-                       '----->|   jmp *[ ]|---,      +--------------+   |
-                              |   push N  |   |      | [4] for printf |   |
-                              |   jmp PLT0|   |      +--------------+   |
-                              +-----------+   |                          |
-                                              +--------------------------'
-                                              "read add's actual address"
-```
+![call add@plt in .text goes to the add@plt stub, and that stub reads the add slot in .got.plt](../../images/fig/en/06-2-overview.svg)
 
 Key points:
 
@@ -113,22 +87,7 @@ address:
 `.got.plt` is an array of uint64. **The first 3 are reserved**, and the
 4th onward is one slot per function:
 
-```
-   .got.plt:
-   +--------------------------+
-   | [0]  &.dynamic           |   Address of the .dynamic section (written by the static linker)
-   +--------------------------+
-   | [1]  link_map pointer    |   Written at startup by ld-linux.so (link_map is detailed in Step 7)
-   +--------------------------+
-   | [2]  _dl_runtime_resolve |   Written at startup by ld-linux.so
-   |                          |   = the address of the address-resolution routine (resolver) itself
-   +--------------------------+
-   | [3]  address of add      |   ← Initial value is "add@plt+6", pointing back into the PLT
-   +--------------------------+
-   | [4]  address of printf   |   (if printf is being used)
-   +--------------------------+
-   | ...                      |
-```
+![The first three .got.plt slots are reserved; from the fourth on there is one slot per function](../../images/fig/en/06-3-got-plt-layout.svg)
 
 `[1]` and `[2]` are written by ld-linux.so **after building the link map (below)**.
 `[3]` onward is rewritten **when the PLT is resolved** (= **at the first call to the function**).
@@ -196,24 +155,7 @@ The PLT stubs are lined up one per function in `.plt`. The shape of the
 the GOT slot referenced by `jmp *[ ]` and the value pushed by `push N`
 (= the reloc index for that function):
 
-```
-   .plt:
-   +--------------+
-   | PLT0:        |
-   |   ...        |
-   +--------------+
-   | add@plt:     |
-   |   jmp *[ ]   |    <-- references .got.plt[3]
-   |   push 0x0   |    <-- reloc index 0 (means add)
-   |   jmp PLT0   |
-   +--------------+
-   | printf@plt:  |
-   |   jmp *[ ]   |    <-- references .got.plt[4]
-   |   push 0x1   |    <-- reloc index 1 (means printf)
-   |   jmp PLT0   |
-   +--------------+
-        ...             (as many entries as functions used)
-```
+![.plt holds a three-instruction stub per function](../../images/fig/en/06-4-plt-layout.svg)
 
 (Our subject's `main` calls only `add`, so in reality there are only 2
 entries: PLT0 and add@plt. The printf@plt above is a pattern example of

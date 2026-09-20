@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 392" width="860" height="392" role="img" aria-label="The startup stack holds, from low to high, argc, argv, envp, auxv and the string bodies">
+  <title>The startup stack in outline</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="860" height="392" fill="#ffffff"/>
+  <text class="cap" x="80" y="34">high address</text>
+
+  <rect x="80" y="42" width="340" height="52" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text class="s" x="98" y="64">(string bodies)</text>
+  <text class="mono" x="98" y="86">./main\0,  PATH=...\0, etc.</text>
+
+  <rect x="80" y="94" width="340" height="80" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text class="mono" x="98" y="116">auxv: AT_NULL, 0</text>
+  <text class="mono" x="98" y="138">auxv: ... contents ...</text>
+  <text class="mono" x="98" y="160">auxv: AT_PHDR, ...</text>
+  <text class="s" x="444" y="138">passes ELF info to ld-linux.so</text>
+
+  <rect x="80" y="174" width="340" height="52" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="98" y="196">envp[1] = NULL</text>
+  <text class="mono" x="98" y="218">envp[0] = (address of PATH...)</text>
+
+  <rect x="80" y="226" width="340" height="52" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="98" y="248">argv[1] = NULL</text>
+  <text class="mono" x="98" y="270">argv[0] = (address of ./main)</text>
+
+  <rect x="80" y="278" width="340" height="34" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+  <text class="mono" x="98" y="300">argc</text>
+  <text class="s" x="444" y="300">RSP</text>
+
+  <text class="cap" x="80" y="348">low address</text>
+  <text class="s" x="80" y="376">The kernel builds this layout inside execve before handing over control.</text>
+</svg>

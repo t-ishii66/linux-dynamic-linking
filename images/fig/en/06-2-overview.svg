@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 290" width="980" height="290" role="img" aria-label="call add@plt in .text goes to the add@plt stub in .plt, and that stub reads the add slot in .got.plt">
+  <title>Static structure of PLT / GOT: .text to .plt to .got.plt</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;fill:#0f172a}
+    .sec{font-size:13px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.8;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="980" height="290" fill="#ffffff"/>
+
+  <text class="sec" x="40"  y="30">.text (RX)</text>
+  <text class="sec" x="330" y="30">.plt (RX)</text>
+  <text class="sec" x="730" y="30">.got.plt (RW)</text>
+
+  <!-- indented body lines use an explicit x offset: SVG collapses leading spaces -->
+  <rect x="40" y="44" width="215" height="112" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="56" y="68">main:</text>
+  <text class="mono" x="74" y="90">...</text>
+  <text class="mono" x="74" y="112">call add@plt</text>
+  <text class="mono" x="74" y="134">...</text>
+
+  <rect x="330" y="44" width="200" height="72" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="346" y="66">PLT0:</text>
+  <text class="mono" x="364" y="86">...</text>
+  <text class="mono" x="364" y="106">...</text>
+
+  <rect x="330" y="126" width="200" height="100" rx="6" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="346" y="148">add@plt:</text>
+  <text class="mono" x="364" y="170">jmp *[ ]</text>
+  <text class="mono" x="364" y="192">push N</text>
+  <text class="mono" x="364" y="214">jmp PLT0</text>
+
+  <g stroke="#94a3b8" stroke-width="1.4">
+    <rect x="730" y="44"  width="210" height="32" fill="#f1f5f9"/>
+    <rect x="730" y="76"  width="210" height="32" fill="#f1f5f9"/>
+    <rect x="730" y="108" width="210" height="32" fill="#f1f5f9"/>
+  </g>
+  <g stroke="#d97706" stroke-width="1.6">
+    <rect x="730" y="140" width="210" height="32" fill="#fef3c7"/>
+    <rect x="730" y="172" width="210" height="32" fill="#fffbeb"/>
+  </g>
+  <text class="mono" x="744" y="65">[0] &amp;.dynamic</text>
+  <text class="mono" x="744" y="97">[1] link_map</text>
+  <text class="mono" x="744" y="129">[2] resolver</text>
+  <text class="mono" x="744" y="161">[3] for add</text>
+  <text class="mono" x="744" y="193">[4] for printf</text>
+  <text class="s" x="744" y="220">...</text>
+
+  <path class="a" d="M182 108 C250 108 275 150 326 150"/>
+  <path class="a" d="M440 166 C560 166 600 156 726 156"/>
+  <text class="s" x="628" y="136" text-anchor="middle">read add's actual address</text>
+
+  <text class="s" x="40" y="254">RX = read + execute / RW = read + write</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" role="img" aria-label="e_phoff points at the program header table, e_shoff at the section header table, e_entry at the first instruction">
+  <title>What e_phoff / e_shoff / e_entry point to</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.6;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="900" height="430" fill="#ffffff"/>
+  <text class="cap" x="210" y="36">offset 0</text>
+
+  <rect x="210" y="44" width="280" height="56" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.6"/>
+  <text class="mono" x="226" y="68">Elf64_Ehdr</text>
+  <text class="s" x="226" y="90">what we just read</text>
+  <text class="s" x="512" y="70">64 bytes</text>
+
+  <g stroke="#2563eb" stroke-width="1.5" fill="#eff6ff">
+    <rect x="210" y="100" width="280" height="30"/>
+    <rect x="210" y="130" width="280" height="30"/>
+    <rect x="210" y="160" width="280" height="30"/>
+    <rect x="210" y="190" width="280" height="30"/>
+  </g>
+  <text class="mono" x="226" y="120">Program header [0]</text>
+  <text class="mono" x="226" y="150">Program header [1]</text>
+  <text class="mono" x="226" y="180">...</text>
+  <text class="mono" x="226" y="210">Program header [12]</text>
+  <text class="s" x="512" y="120">56 bytes</text>
+  <text class="s" x="512" y="150">56 bytes</text>
+  <text class="s" x="512" y="180">13 entries</text>
+  <text class="s" x="512" y="210">56 bytes</text>
+  <path class="a" d="M146 100 L206 100"/>
+  <text class="cap" x="142" y="96" text-anchor="end">e_phoff = 0x40</text>
+
+  <rect x="210" y="220" width="280" height="90" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text class="s" x="226" y="252">... machine code, data ...</text>
+  <text class="s" x="512" y="248">Somewhere in here, pointed to by e_entry = 0x1050,</text>
+  <text class="s" x="512" y="268">is the first instruction of main.</text>
+  <text class="s" x="512" y="288">(PIE, so the actual VA is base_main + 0x1050)</text>
+
+  <rect x="210" y="310" width="280" height="46" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <text class="mono" x="226" y="338">Section header table</text>
+  <text class="s" x="512" y="338">not used at runtime</text>
+  <path class="a" d="M146 310 L206 310"/>
+  <text class="cap" x="142" y="306" text-anchor="end">e_shoff = 0x3668</text>
+
+  <text class="cap" x="210" y="392">end</text>
+</svg>

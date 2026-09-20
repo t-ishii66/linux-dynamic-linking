@@ -56,30 +56,7 @@ Turning this into a picture, the relationship between the link_map
 linked list (left) and the lookup scope table pointed to by main's
 `l_scope` (right) is:
 
-```
-   link_map (linked list)                       main's lookup scope
-                                                (= the search-order list pointed to by main's l_scope)
-
-   +--------------------------+               +--------------------+
-   |  main                    |               |  [0] main          |
-   |    l_addr = base_main    |               |  [1] libmylib.so   |
-   |    l_ld   = &.dynamic    |               |  [2] libc.so.6     |
-   |    l_scope --------------|-------------->|  [3] ld-linux.so   |
-   |    l_next ---------.     |               +--------------------+
-   +--------------------|-----+
-                        |
-                        v
-   +--------------------------+
-   |  libmylib.so             |
-   |    l_addr = base_libmylib|
-   |    l_ld   = &.dynamic    |
-   |    l_scope               |
-   |    l_next ---------.     |
-   +--------------------|-----+
-                        |
-                        v
-                       ...     (continues with libc.so.6, ld-linux.so)
-```
+![The link_map linked list, and the lookup scope list pointed to by l_scope](../../images/fig/en/07-1-link-map.svg)
 
 (The table on the right is **the substance of "the symbol search order
 list" touched on in Step 5 § lookup scope**, and the `l_scope` field of
@@ -111,21 +88,7 @@ machine code.
 The PLT/GOT we are chasing (Step 6's Big Picture, re-drawn with PLT0's
 contents and `push 0` filled in):
 
-```
-   .text (RX)                 .plt (RX)                .got.plt (RW)
-   +----------------+         +----------------+       +---------------+
-   | main:          |         | PLT0:          |       | [0] &.dynamic |
-   |   ...          |         |   push *[gp1]  |------>| [1] link_map  |
-   |   call add@plt | -.      |   jmp  *[gp2]  |------>| [2] resolver  |
-   |   pop rbp      |  |      +----------------+       +---------------+
-   +----------------+  |      | add@plt:       |       | [3] for add   |<--,
-                       '----->|   jmp *[gp3]   |----,  +---------------+   |
-                              |   push 0       |    |  | [4] for printf |   |
-                              |   jmp PLT0     |    |  +---------------+   |
-                              +----------------+    |                      |
-                                                    +----------------------'
-                                                    (initial value: add@plt+6)
-```
+![PLT0 references the link_map and resolver slots, and add@plt references the add slot](../../images/fig/en/07-2-plt-got-runtime.svg)
 
 (gp1 / gp2 / gp3 are shorthand for `.got.plt[1]` / `[2]` / `[3]`.)
 
@@ -181,18 +144,7 @@ T12-T15 is the "real function's execution".
 
 The stack at time T6 (immediately after entering the resolver):
 
-```
-   high address
-   +--------------------+
-   |  main's return addr|   <-- pushed by main at T0
-   +--------------------+
-   |  reloc index = 0   |   <-- pushed by add@plt at T2
-   +--------------------+
-   |  link_map ptr      |   <-- pushed by PLT0 at T4 (top of stack = RSP)
-   +--------------------+
-   |  ...               |       (region below RSP is unused)
-   low address
-```
+![On reaching the resolver the stack holds the return address, the reloc index and the link_map pointer](../../images/fig/en/07-3-stack-at-resolver.svg)
 
 Resolver-entry state:
 
@@ -221,14 +173,7 @@ The key points here are 2:
 The stack immediately before the resolver jmps to add (= the moment add
 is called):
 
-```
-   high address
-   +--------------------+
-   |  main's return addr|   <-- top of stack (RSP)
-   +--------------------+       (pushed at T0, still there through T6→T12)
-   |  ...               |
-   low address
-```
+![After resolution the two pushed values are removed and the return address is back on top](../../images/fig/en/07-4-stack-after-resolve.svg)
 
 At the moment we enter add, the top of the stack is **main's return
 address**, so `ret` at the end of add pops it and returns straight back

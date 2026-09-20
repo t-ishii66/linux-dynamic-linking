@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 490" width="900" height="490" role="img" aria-label="ELF ファイルは先頭から ELF ヘッダ、プログラムヘッダ、セグメント本体、セクションヘッダの順に並ぶ">
+  <title>ELF ファイル全体のレイアウト</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="900" height="490" fill="#ffffff"/>
+  <text class="cap" x="120" y="36">offset 0</text>
+
+  <rect x="120" y="44" width="300" height="62" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.6"/>
+  <text class="mono" x="138" y="70">ELF header</text>
+  <text class="mono" x="138" y="92">(Elf64_Ehdr)</text>
+  <text class="s" x="446" y="70">64 bytes 固定 (ELF64)</text>
+  <text class="s" x="446" y="92">Program headers / Section headers の位置を教える</text>
+
+  <rect x="120" y="106" width="300" height="62" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="138" y="132">Program headers</text>
+  <text class="mono" x="138" y="154">Elf64_Phdr * N</text>
+  <text class="s" x="446" y="143">プログラムヘッダの配列</text>
+
+  <rect x="120" y="168" width="300" height="210" fill="#f8fafc" stroke="#64748b" stroke-width="1.6"/>
+  <text class="s" x="138" y="194">... segments ...</text>
+  <text class="mono" x="138" y="216">.text</text>
+  <text class="s" x="230" y="216">機械語</text>
+  <text class="mono" x="138" y="238">.rodata</text>
+  <text class="s" x="230" y="238">定数</text>
+  <text class="mono" x="138" y="260">.data</text>
+  <text class="s" x="230" y="260">初期化済みデータ</text>
+  <text class="mono" x="138" y="282">.dynamic</text>
+  <text class="mono" x="138" y="304">.plt  .got</text>
+  <text class="mono" x="138" y="326">.dynsym  .dynstr</text>
+  <text class="mono" x="138" y="348">.gnu.hash</text>
+  <text class="mono" x="138" y="368">...</text>
+
+  <rect x="120" y="378" width="300" height="62" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <text class="mono" x="138" y="404">Section headers</text>
+  <text class="mono" x="138" y="426">Elf64_Shdr * M</text>
+  <text class="s" x="446" y="404">リンク時 / objdump 用</text>
+  <text class="s" x="446" y="426">実行時には使われない</text>
+
+  <text class="cap" x="120" y="462">end of file</text>
+</svg>

@@ -9,28 +9,7 @@ ELFヘッダの次はプログラムヘッダ。本章はプログラムヘッ�
 
 ## ファイル全体図
 
-```
-   offset 0
-       +------------------------+
-       |  Elf64_Ehdr (64B)      |
-       +------------------------+ <-- e_phoff
-       |  Elf64_Phdr [0]        | \
-       |  Elf64_Phdr [1]        |  |
-       |  ...                   |  > 13 個 (e_phnum)、各 56B (e_phentsize)
-       |  Elf64_Phdr [12]       | /
-       +------------------------+
-       |                        |
-       |  実体データ              |
-       |  .text, .rodata, .data,|
-       |  .dynamic, .plt, .got, |
-       |  .dynsym, .dynstr,     |
-       |  .gnu.hash, ...        |
-       |                        |
-       +------------------------+
-       |  Section headers       |
-       +------------------------+
-   end
-```
+![プログラムヘッダ表は e_phnum 個、各 e_phentsize バイトで並ぶ](../../images/fig/ja/02-1-file-layout.svg)
 
 プログラムヘッダは 1 つ 56 バイトの構造体 (`Elf64_Phdr`) で、
 **メモリにロードされる領域** または **実行環境 (カーネル / 動的リンカ)
@@ -180,37 +159,7 @@ Program Headers:
 これを図にすると (ファイル上の 4 つの `PT_LOAD` が、カーネルの `mmap`
 で仮想アドレス空間に配置される様子):
 
-```
-   FILE (on disk)                       MEMORY (after mmap by kernel)
-   ==============                       =============================
-
-   offset 0x0000                        vaddr 0x0000 + base_main
-       +-----------------+                  +-----------------+
-       | ELF header      |                  | ELF header etc. |
-       | Program headers | ---LOAD#1--->    | (R only)        |
-       | INTERP string   |                  |                 |
-       | .note ...       |                  |                 |
-       +-----------------+                  +-----------------+
-   offset 0x1000                        vaddr 0x1000 + base_main
-       +-----------------+                  +-----------------+
-       | .plt            |                  | .plt            |
-       | .text (code)    | ---LOAD#2--->    | .text           |  R-X
-       |  (add@plt ...)  |                  |  (add@plt ...)  |
-       +-----------------+                  +-----------------+
-   offset 0x2000                        vaddr 0x2000 + base_main
-       +-----------------+                  +-----------------+
-       | .rodata         | ---LOAD#3--->    | .rodata         |  R--
-       | .eh_frame       |                  |                 |
-       +-----------------+                  +-----------------+
-   offset 0x2da0                        vaddr 0x3da0 + base_main
-       +-----------------+                  +-----------------+
-       | .init_array     |                  | .init_array     |
-       | .dynamic        | ---LOAD#4--->    | .dynamic        |  RW-
-       | .got  .got.plt  |                  | .got  .got.plt  |
-       | .data           |                  | .data           |
-       |                 |                  | .bss   (zero)   | <-- p_memsz is
-       +-----------------+                  +-----------------+     8 bytes larger
-```
+![ファイル上の 4 領域がそれぞれ PT_LOAD としてメモリにマップされ権限が付く](../../images/fig/ja/02-2-file-to-memory.svg)
 
 LOAD#4 だけ `p_offset (0x2da0)` と `p_vaddr (0x3da0)` が **ズレている**。
 「ファイル上は前のセグメントにくっつけて詰めて置くが、メモリ上では新しい
@@ -305,35 +254,7 @@ ELF に依存しないため、`ld-linux.so` だけ先に独立して走れる�
 ここまでがカーネルの担当。以降は ld-linux.so が動く。この時点での
 VA 空間はこういう状態:
 
-```
-   仮想アドレス空間 (例)
-
-       低位 +-------------------------+
-            |                         |
-            | (空き)                  |
-            |                         |
-   base_main+-------------------------+ <-- ASLR で決まる
-            | main: LOAD#1 R--        |
-            +-------------------------+
-            | main: LOAD#2 R-X .text  |
-            +-------------------------+
-            | main: LOAD#3 R-- .rodata|
-            +-------------------------+
-            | main: LOAD#4 RW- .got   |
-            |              .data .bss |
-            +-------------------------+
-            |                         |
-            | (空き)                  |
-            |                         |
-   base_ld  +-------------------------+ <-- これも ASLR で決まる
-            | ld-linux.so: LOAD#1 R-X |
-            +-------------------------+
-            | ld-linux.so: LOAD#2 RW- |
-            +-------------------------+
-            |                         |
-            :                         :
-       高位
-```
+![仮想アドレス空間に main と ld-linux.so の PT_LOAD が ASLR で決まる base から並ぶ](../../images/fig/ja/02-3-address-space.svg)
 
 ---
 

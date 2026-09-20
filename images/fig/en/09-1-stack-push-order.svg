@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 250" width="760" height="250" role="img" aria-label="The stack grows from high addresses toward low ones, and the last value pushed is on top">
+  <title>Which way the stack grows, and push order</title>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+  </style>
+  <rect width="760" height="250" fill="#ffffff"/>
+  <text class="cap" x="80" y="34">high address</text>
+
+  <rect x="80" y="42" width="120" height="42" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="130" y="69" text-anchor="middle">A</text>
+  <text class="s" x="224" y="69">pushed first</text>
+
+  <rect x="80" y="84" width="120" height="42" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text class="mono" x="130" y="111" text-anchor="middle">B</text>
+  <text class="s" x="224" y="111">pushed next</text>
+
+  <rect x="80" y="126" width="120" height="42" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+  <text class="mono" x="130" y="153" text-anchor="middle">C</text>
+  <text class="s" x="224" y="153">pushed last (= current top)</text>
+
+  <text class="cap" x="80" y="198">low address</text>
+  <text class="s" x="80" y="228">Each push lowers the address. Lower in the figure means newer.</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 340" width="980" height="340" role="img" aria-label="PLT0 は got.plt の link_map と resolver を参照し、add@plt は add 用スロットを参照する。そのスロットの初期値は add@plt+6 を指す">
+  <title>遅延束縛時の PLT / GOT 参照関係</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#b45309"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .sec{font-size:13px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.7;fill:none;marker-end:url(#ah)}
+    .d{stroke:#b45309;stroke-width:1.6;fill:none;stroke-dasharray:5 3;marker-end:url(#ahd)}
+  </style>
+  <rect width="980" height="340" fill="#ffffff"/>
+  <text class="sec" x="40"  y="30">.text (RX)</text>
+  <text class="sec" x="330" y="30">.plt (RX)</text>
+  <text class="sec" x="730" y="30">.got.plt (RW)</text>
+
+  <rect x="40" y="44" width="215" height="112" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text class="mono" x="56" y="68">main:</text>
+  <text class="mono" x="74" y="90">...</text>
+  <text class="mono" x="74" y="112">call add@plt</text>
+  <text class="mono" x="74" y="134">pop rbp</text>
+
+  <rect x="330" y="44" width="210" height="76" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="346" y="66">PLT0:</text>
+  <text class="mono" x="364" y="88">push *[gp1]</text>
+  <text class="mono" x="364" y="110">jmp  *[gp2]</text>
+
+  <rect x="330" y="134" width="210" height="94" rx="6" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text class="mono" x="346" y="156">add@plt:</text>
+  <text class="mono" x="364" y="178">jmp *[gp3]</text>
+  <text class="mono" x="364" y="200">push 0</text>
+  <text class="mono" x="364" y="222">jmp PLT0</text>
+
+  <g stroke="#94a3b8" stroke-width="1.4">
+    <rect x="730" y="44"  width="210" height="30" fill="#f1f5f9"/>
+    <rect x="730" y="74"  width="210" height="30" fill="#f1f5f9"/>
+    <rect x="730" y="104" width="210" height="30" fill="#f1f5f9"/>
+  </g>
+  <g stroke="#d97706" stroke-width="1.6">
+    <rect x="730" y="134" width="210" height="30" fill="#fef3c7"/>
+    <rect x="730" y="164" width="210" height="30" fill="#fffbeb"/>
+  </g>
+  <text class="mono" x="744" y="64">[0] &amp;.dynamic</text>
+  <text class="mono" x="744" y="94">[1] link_map</text>
+  <text class="mono" x="744" y="124">[2] resolver</text>
+  <text class="mono" x="744" y="154">[3] add 用</text>
+  <text class="mono" x="744" y="184">[4] printf 用</text>
+
+  <path class="a" d="M182 108 C250 108 275 160 326 160"/>
+  <path class="a" d="M464 84 L726 84"/>
+  <path class="a" d="M464 106 C600 106 624 119 726 119"/>
+  <path class="a" d="M456 174 C600 174 640 149 726 149"/>
+
+  <path class="d" d="M835 194 L835 252 L570 252 L570 196 L548 196"/>
+  <text class="s" x="700" y="274" text-anchor="middle">スロットの初期値 = add@plt+6 (= push 0 の番地)</text>
+
+  <text class="s" x="40" y="300">未解決時: call → add@plt → 初期値により push 0 に戻る → jmp PLT0 → link_map と resolver を積んで解決ルーチンへ。</text>
+  <text class="s" x="40" y="322">解決後: [3] に add の実 VA が書かれ、jmp *[gp3] が直接 add へ飛ぶ。</text>
+</svg>

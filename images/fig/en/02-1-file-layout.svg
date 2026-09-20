@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" role="img" aria-label="The program header table holds e_phnum entries of e_phentsize bytes each">
+  <title>Layout from the start of the file, and the program header table</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:ui-sans-serif,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .cap{font-size:12.5px;font-weight:600;fill:#475569;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s{font-size:12.5px;fill:#475569}
+    .a{stroke:#334155;stroke-width:1.6;fill:none;marker-end:url(#ah)}
+  </style>
+  <rect width="900" height="430" fill="#ffffff"/>
+  <text class="cap" x="210" y="36">offset 0</text>
+
+  <rect x="210" y="44" width="300" height="42" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.6"/>
+  <text class="mono" x="228" y="70">Elf64_Ehdr (64B)</text>
+
+  <g stroke="#2563eb" stroke-width="1.5" fill="#eff6ff">
+    <rect x="210" y="86"  width="300" height="28"/>
+    <rect x="210" y="114" width="300" height="28"/>
+    <rect x="210" y="142" width="300" height="28"/>
+    <rect x="210" y="170" width="300" height="28"/>
+  </g>
+  <text class="mono" x="228" y="105">Elf64_Phdr [0]</text>
+  <text class="mono" x="228" y="133">Elf64_Phdr [1]</text>
+  <text class="mono" x="228" y="161">...</text>
+  <text class="mono" x="228" y="189">Elf64_Phdr [12]</text>
+  <path class="a" d="M146 86 L206 86"/>
+  <text class="cap" x="142" y="82" text-anchor="end">e_phoff</text>
+
+  <path d="M522 86 L532 86 L532 198 L522 198" fill="none" stroke="#2563eb" stroke-width="1.4"/>
+  <text class="s" x="544" y="136">13 entries (e_phnum)</text>
+  <text class="s" x="544" y="156">56B each (e_phentsize)</text>
+
+  <rect x="210" y="198" width="300" height="140" fill="#f8fafc" stroke="#64748b" stroke-width="1.6"/>
+  <text class="s" x="228" y="224">data body</text>
+  <text class="mono" x="228" y="250">.text, .rodata, .data,</text>
+  <text class="mono" x="228" y="272">.dynamic, .plt, .got,</text>
+  <text class="mono" x="228" y="294">.dynsym, .dynstr,</text>
+  <text class="mono" x="228" y="316">.gnu.hash, ...</text>
+
+  <rect x="210" y="338" width="300" height="42" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <text class="mono" x="228" y="364">Section headers</text>
+
+  <text class="cap" x="210" y="404">end</text>
+</svg>

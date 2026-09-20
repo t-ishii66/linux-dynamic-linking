@@ -51,30 +51,7 @@ PLT0 はこの link_map ノードのアドレスを resolver に渡す。
 図にすると、link_map の連結リスト (左) と、main の `l_scope` が指す
 lookup scope の表 (右) は次のような関係:
 
-```
-   link_map (連結リスト)                        main の lookup scope
-                                                (= main の l_scope が指す検索順序リスト)
-
-   +--------------------------+               +--------------------+
-   |  main                    |               |  [0] main          |
-   |    l_addr = base_main    |               |  [1] libmylib.so   |
-   |    l_ld   = &.dynamic    |               |  [2] libc.so.6     |
-   |    l_scope --------------|-------------->|  [3] ld-linux.so   |
-   |    l_next ---------.     |               +--------------------+
-   +--------------------|-----+
-                        |
-                        v
-   +--------------------------+
-   |  libmylib.so             |
-   |    l_addr = base_libmylib|
-   |    l_ld   = &.dynamic    |
-   |    l_scope               |
-   |    l_next ---------.     |
-   +--------------------|-----+
-                        |
-                        v
-                       ...     (libc.so.6, ld-linux.so と続く)
-```
+![link_map の連結リストと main の l_scope が指す検索順序リスト](../../images/fig/ja/07-1-link-map.svg)
 
 (右の表が **Step 5 § lookup scope で触れた「シンボル検索の順序リスト」
 の実体** で、`link_map` の `l_scope` フィールドがまさにこの表を指す
@@ -102,21 +79,7 @@ lookup scope の表 (右) は次のような関係:
 追いかける先の PLT/GOT (Step 6 の 全体図 を、PLT0 の中身と `push 0`
 を反映した形で再掲):
 
-```
-   .text (RX)                 .plt (RX)                .got.plt (RW)
-   +----------------+         +----------------+       +---------------+
-   | main:          |         | PLT0:          |       | [0] &.dynamic |
-   |   ...          |         |   push *[gp1]  |------>| [1] link_map  |
-   |   call add@plt | -.      |   jmp  *[gp2]  |------>| [2] resolver  |
-   |   pop rbp      |  |      +----------------+       +---------------+
-   +----------------+  |      | add@plt:       |       | [3] add 用    |<--,
-                       '----->|   jmp *[gp3]   |----,  +---------------+   |
-                              |   push 0       |    |  | [4] printf 用 |   |
-                              |   jmp PLT0     |    |  +---------------+   |
-                              +----------------+    |                      |
-                                                    +----------------------'
-                                                    (初期値: add@plt+6)
-```
+![PLT0 は link_map と resolver のスロットを、add@plt は add 用スロットを参照する](../../images/fig/ja/07-2-plt-got-runtime.svg)
 
 (gp1 / gp2 / gp3 は `.got.plt[1]` / `[2]` / `[3]` の略記)
 
@@ -172,18 +135,7 @@ T12〜T15 が "実関数の実行"。
 
 T6 の時点 (resolver に入った直後) のスタックは:
 
-```
-   高アドレス
-   +--------------------+
-   |  main の戻り先     |   <-- T0 で main が push
-   +--------------------+
-   |  reloc index = 0   |   <-- T2 で add@plt が push
-   +--------------------+
-   |  link_map ptr      |   <-- T4 で PLT0 が push (スタック先頭 = RSP)
-   +--------------------+
-   |  ...               |       (RSP より下は未使用領域)
-   低アドレス
-```
+![resolver 到達時のスタックには main の戻り先、reloc index、link_map ポインタが積まれている](../../images/fig/ja/07-3-stack-at-resolver.svg)
 
 resolver 入口の状態:
 
@@ -208,14 +160,7 @@ System V x86_64 ABI に従って、第 1 引数を `RDI` に、第 2 引数を `
 
 resolver が add に jmp する直前 (= add が呼ばれた瞬間) のスタック:
 
-```
-   高アドレス
-   +--------------------+
-   |  main の戻り先     |   <-- スタック先頭 (RSP)
-   +--------------------+       (T0 で push、T6→T12 の間もそのまま残る)
-   |  ...               |
-   低アドレス
-```
+![解決後は積まれていた 2 つが取り除かれ main の戻り先が先頭に戻る](../../images/fig/ja/07-4-stack-after-resolve.svg)
 
 add に入った時点でスタック先頭が **main の戻り先** なので、add の末尾の
 `ret` はそれを pop してそのまま main の `pop rbp` に戻る。
