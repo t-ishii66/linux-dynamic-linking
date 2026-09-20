@@ -15,3 +15,15 @@ PROBLEMS.md
 _site/
 .jekyll-cache/
 .jekyll-metadata
+
+# Secrets (never commit; placeholders are allowed back in)
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
+*.pem
+*.key
+id_rsa*
+credentials.json
+service-account*.json
