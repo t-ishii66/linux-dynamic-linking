@@ -12,6 +12,8 @@ permalink: /
 
 **English** | [日本語 (Japanese)](README-jp.md)
 
+> 📖 For the best reading experience, read the documentation on GitHub Pages: **<https://t-ishii66.github.io/linux-dynamic-linking/>**
+
 Two files, `main.c` and `mylib.c`, are provided: `main.c` is built into the executable `main`, and `mylib.c` is built into the shared library `libmylib.so`. `main` uses `libmylib.so`, but `libmylib.so` itself is not included inside `main`.
 
 <!-- SEO intro added by setup-github-pages; review and adjust -->

@@ -11,6 +11,8 @@ lang: ja
 
 [English (英語)](README.md) | **日本語**
 
+> 📖 ドキュメントを綺麗な表示で読むには、GitHub Pages 版をどうぞ: **<https://t-ishii66.github.io/linux-dynamic-linking/README-jp.html>**
+
 2 つのファイル `main.c` と `mylib.c` が用意されており、`main.c` は実行ファイル `main` に、`mylib.c` は共有ライブラリ `libmylib.so` にビルドされる。`main` は `libmylib.so` を使うが、`main` 自体に `libmylib.so` は含まれていない。
 
 <!-- SEO intro added by setup-github-pages; review and adjust -->
